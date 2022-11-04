@@ -1,1 +1,0 @@
-sinapsa progi projekat
