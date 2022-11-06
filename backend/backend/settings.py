@@ -77,9 +77,9 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Sinapsa',
+        'NAME': 'sinapsa',
         'USER': 'admin',
-        'PASSWORD': 'adminadmin',
+        'PASSWORD': 'abc',
         'HOST': 'localhost',
         'PORT': '5432',
     }   
