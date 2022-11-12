@@ -25,12 +25,13 @@ SECRET_KEY = 'django-insecure-py@7^tg(&ikqw-5l$=!dkd_#2e)q2zslmxszw-5k4d$7v+-abz
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['10.2.0.22', '127.0.0.1']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'login',
     'main',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -79,7 +80,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'sinapsa',
         'USER': 'admin',
-        'PASSWORD': 'abc',
+        'PASSWORD': 'adminadmin',
         'HOST': 'localhost',
         'PORT': '5432',
     }   
