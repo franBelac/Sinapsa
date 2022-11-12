@@ -12,7 +12,6 @@ export default {
 
     const handleRegister = () => {
 
-
       if (!email.value.endsWith('@fer.hr')) {
         alert('Please enter a valid email address!')
         return
@@ -61,20 +60,24 @@ export default {
           <form class="row g-3" @submit.prevent="handleRegister">
             <div class="col-md-6">
               <label for="name " class="form-label ">Name</label>
-              <input type="text" required class="form-control" v-model="name" id="name " placeholder="Enter your name" maxlength="20" minlength="2">
+              <input type="text" required class="form-control" v-model="name" id="name " placeholder="Enter your name"
+                maxlength="20" minlength="2">
 
             </div>
             <div class="col-md-6">
               <label for="surname" class="form-label">Surname</label>
-              <input type="text" required class="form-control" v-model="surname" id="surname" placeholder="Enter your surname" maxlength="20" minlength="2">
+              <input type="text" required class="form-control" v-model="surname" id="surname"
+                placeholder="Enter your surname" maxlength="20" minlength="2">
             </div>
             <div class=" col-12 ">
               <label for="email" class="form-label">Email</label>
-              <input type="email" required class="form-control" v-model="email" id="email" placeholder="Enter your email" maxlength="30" minlength="8">
+              <input type="email" required class="form-control" v-model="email" id="email"
+                placeholder="Enter your email" maxlength="30" minlength="8">
             </div>
             <div class=" col-12 ">
               <label for="username" class="form-label">Username</label>
-              <input type="text" required class="form-control" v-model="username" id="username" placeholder="This is how others will see you" maxlength="20" minlength="3">
+              <input type="text" required class="form-control" v-model="username" id="username"
+                placeholder="This is how others will see you" maxlength="20" minlength="3">
             </div>
             <div class=" col-12 ">
               <label for="password" class="form-label">Password</label>
