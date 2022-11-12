@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'login',
     'main',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -79,7 +80,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'sinapsa',
         'USER': 'admin',
-        'PASSWORD': 'abc',
+        'PASSWORD': 'adminadmin',
         'HOST': 'localhost',
         'PORT': '5432',
     }   
