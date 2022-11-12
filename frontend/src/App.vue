@@ -1,25 +1,26 @@
 <script setup>
 import { RouterLink, RouterView } from "vue-router";
+
 </script>
 
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-      <p class="navbar-brand" href="#">
-        <RouterLink to="/">Home</RouterLink>
-      </p>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
-        aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <div class="container">
+      <RouterLink to="/" class="navbar-brand">Sinappsa</RouterLink>
+      <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav"
+        aria-label="Expand Navigation">
+        <div class="navbar-toggler-icon"></div>
       </button>
-      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <div class="collapse navbar-collapse justify-content-end" id="nav">
         <ul class="navbar-nav">
           <li class="nav-item">
-                <RouterLink to="/">Home</RouterLink>
-                
+            <RouterLink to="/" class="nav-link">Home</RouterLink>
           </li>
           <li class="nav-item">
-            <RouterLink to="/login">Login</RouterLink>
+            <RouterLink to="/login" class="nav-link">Login</RouterLink>
+          </li>
+          <li class="nav-item">
+            <RouterLink to="/register" class="nav-link">Register</RouterLink>
           </li>
         </ul>
       </div>
