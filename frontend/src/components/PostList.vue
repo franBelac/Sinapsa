@@ -1,16 +1,10 @@
-<script >
-const loggedIn = true
-
-export default {
-  props: {
-    posts: {
-      type: Array,
-      required: true
-    }
-  },
-}
-
-
+<script setup >
+const props = defineProps({
+  posts: {
+    type: Array,
+    required: true
+  }
+})
 </script>
 
 <template>
@@ -31,7 +25,7 @@ export default {
         <small class="text-muted ">{{ post.author }}</small>
         <div class="d-flex justify-content-between">
 
-          <small class="text-muted " v-if="loggedIn">{{ post.email }}</small>
+          <small class="text-muted ">{{ post.email }}</small>
           <h6 class="pull-right font-weight-bold">{{ post.tip }}</h6>
         </div>
       </li>
