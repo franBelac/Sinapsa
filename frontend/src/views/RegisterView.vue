@@ -1,50 +1,49 @@
-<script >
-
+<script setup >
+import { useCookies } from 'vue3-cookies'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+const { cookies } = useCookies()
+const username = ref('')
+const password = ref('')
+const email = ref('')
+const name = ref('')
+const surname = ref('')
+const router = useRouter()
 
-export default {
-  setup() {
-    const username = ref('')
-    const password = ref('')
-    const email = ref('')
-    const name = ref('')
-    const surname = ref('')
-
-    const handleRegister = () => {
-
-      if (!email.value.endsWith('@fer.hr')) {
-        alert('Please enter a valid email address!')
+const handleRegister = () => {
+  if (!email.value.endsWith('@fer.hr')) {
+    alert('Please enter a valid email address!')
+    return
+  }
+  fetch('http://ax1.axiros.hr:8080/register', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      name: name.value,
+      surname: surname.value,
+      username: username.value,
+      avatar: "neki avatar",
+      email: email.value,
+      password: password.value
+    })
+  })
+    .then(res => {
+      console.log(res)
+      if (res.status === 201) {
+        router.push({ name: 'login' })
         return
       }
+      else {
+        alert('Unable to register!')
+        return
+      }
+    })
+}
 
-      fetch('http://localhost:3000/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          username: username.value,
-          password: password.value,
-          email: email.value,
-          name: name.value,
-          surname: surname.value
-        })
-      })
-        .then(res => res.json())
-        .then(data => {
-          console.log(data)
-        })
-    }
-
-    return {
-      handleRegister,
-      username,
-      password,
-      name,
-      surname,
-      email
-    }
-  }
+if (cookies.get('token')) {
+  router.push('/')
 }
 
 </script>
@@ -92,7 +91,3 @@ export default {
 
   </body>
 </template>
-
-<style>
-
-</style>

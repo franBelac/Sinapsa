@@ -1,46 +1,50 @@
-<script>
+<script setup>
 import { ref } from 'vue'
-export default {
-  setup() {
+import { useRouter } from 'vue-router'
+import { useCredentialsStore } from '../stores/credentials'
+import { useCookies } from 'vue3-cookies'
+const router = useRouter()
+const username = ref('')
+const password = ref('')
+const credentials = useCredentialsStore()
+const { cookies } = useCookies()
+const handleLogin = () => {
+  fetch('http://ax1.axiros.hr:8080/login/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      username: username.value,
+      password: password.value
+    })
+  })
+    .then(res => res.json())
+    .then((res) => {
+      if (res.status === 'USER NE POSTOJI') {
+        console.log(res)
+        alert('User does not exist!')
+        return
+      }
+      credentials.username = username.value
+      credentials.token = "jwt_baticee"
+      cookies.set('token', credentials.token)
+      cookies.set('username', credentials.username)
+      router.push({ name: 'home' })
+    })
+    .catch(err => {
+      console.log(err)
+    })
+}
 
-    const username = ref('')
-    const password = ref('')
-
-    const handleLogin = () => {
-
-      fetch('http://10.2.0.22:8000/login/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: username.value,
-          password: password.value
-        })
-      })
-        .then(res => res.json())
-        .then(data => {
-          console.log(data)
-        })
-        .catch(err => {
-          console.log(err)
-        })
-
-    }
-
-    return {
-      handleLogin,
-      username,
-      password
-    }
-  },
+if (cookies.get('token')) {
+  router.push('/')
 }
 </script>
 
 <template>
 
   <body class="bg-dark h-100">
-
     <div class="d-flex justify-content-center align-items-center h-100">
       <div class="card login-form">
         <div class="card-body">
@@ -60,15 +64,10 @@ export default {
               </div>
               <button type="submit" class="btn btn-dark w-100 m-1">Log In</button>
             </form>
-
           </div>
         </div>
       </div>
     </div>
-
   </body>
 </template>
 
-<style>
-
-</style>
