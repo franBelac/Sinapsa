@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.http import HttpResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed
 from .models import Registrirani
 from django.db import models
@@ -21,12 +22,12 @@ class LoginView(APIView):
         user = Registrirani.objects.filter(username=username).first()
 
         if user is None:
-            return JsonResponse({'status':'USER NE POSTOJI'})
+            return JsonResponse({'status':'USER NE POSTOJI'} , status=status.HTTP_400_BAD_REQUEST)
 
         req_pass = user.password
         if req_pass != password:
-            return JsonResponse({'status':'KRIVA LOZINKA'})
+            return JsonResponse({'status':'KRIVA LOZINKA'} , status=status.HTTP_400_BAD_REQUEST)
         else:
-            return JsonResponse({'status':'LOGIRAN'})
+            return JsonResponse({'status':'LOGIRAN'} , status=status.HTTP_200_OK)
         #Ivek
         #1234
