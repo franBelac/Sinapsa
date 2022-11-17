@@ -22,10 +22,10 @@ class RegistriraniView(APIView):
     # 2. Create
     def post(self, request, *args, **kwargs):
         data = {
-            'firstname': request.data.get('firstname'), 
-            'lastname': request.data.get('lastname'),
+            'firstname': request.data.get('name'), 
+            'lastname': request.data.get('surname'),
             'username': request.data.get('username'),
-            'useravatar': request.data.get('useravatar'), 
+            'useravatar': request.data.get('avatar'), 
             'password': request.data.get('password'), 
             'email': request.data.get('email'),
             'created': date.today(),  
