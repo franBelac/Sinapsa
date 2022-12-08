@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
     const username = req.body.username
     const password = req.body.password
     const users = await db.query(userQuery,[username, password])
-    
+
     if(users.rowCount == 0) {
         res.json({status: 'failed'})
         return

@@ -25,10 +25,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const loginRouter = require('./routes/login.routes')
 const registerRouter = require('./routes/register.routes')
+const deleteRouter = require('./routes/delete.routes')
+const updateRouter = require('./routes/update.routes')
 
 app.use("/login", loginRouter)
 app.use("/register", registerRouter)
-
+app.use("/delete", deleteRouter)
+app.use("/update", updateRouter)
 
 
 /*const options = {
