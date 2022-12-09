@@ -25,9 +25,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const loginRouter = require('./routes/login.routes')
 const registerRouter = require('./routes/register.routes')
+const postRouter = require('./routes/post.routes')
+const userRouter = require('./routes/user.routes')
 
 app.use("/login", loginRouter)
 app.use("/register", registerRouter)
+app.use("/post", postRouter)
+app.use("/user", userRouter)
 
 
 
