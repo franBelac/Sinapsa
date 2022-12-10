@@ -25,9 +25,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const loginRouter = require('./routes/login.routes')
 const registerRouter = require('./routes/register.routes')
+const confirmRouter = require('./routes/confirm.routes')
 
 app.use("/login", loginRouter)
 app.use("/register", registerRouter)
+app.use("/confirm",confirmRouter)
 
 
 

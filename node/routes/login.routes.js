@@ -5,7 +5,7 @@ const db = require('../db')
 
 
 
-const userQuery = 'select * from registrirani where username = $1 and password = $2';
+const userQuery = 'select * from REGISTERED where username = $1 and password = $2';
 
 
 router.get('/', async (req, res) => {
