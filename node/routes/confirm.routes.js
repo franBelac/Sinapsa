@@ -11,6 +11,7 @@ router.get('/:username', async (req, res) => {
     
     if (query.rowCount == 0) {
         res.status(404).json({error: "no user with such username"})
+        return
     }
 
     res.status(200).redirect("/")
