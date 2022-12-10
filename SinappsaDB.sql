@@ -7,7 +7,7 @@ CREATE TABLE REGISTERED
   userAvatar VARCHAR NOT NULL,
   password VARCHAR NOT NULL,
   email VARCHAR NOT NULL,
-  created DATE NOT NULL,
+  created DATE,
   UNIQUE (userName),
   UNIQUE (email)
 );
