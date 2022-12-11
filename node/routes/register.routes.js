@@ -47,10 +47,18 @@ router.post('/', async (req, res) => {
     const avatar = req.body.avatar
     const email = req.body.email
     const password = req.body.password
+    if (firstname == undefined || surname == undefined || username == undefined 
+        || avatar == undefined || password == undefined || email== undefined )
+        {
+            res.status(400);
+            res.json({status: "fail"})
+            return
+        }
+
     const query = await db.query(insertQuery,[firstname, surname, username, avatar, password, email])
     
     sendConfirmationEmail(email,username)
-
+      
     res.json({status: "success1"})
     return
 
