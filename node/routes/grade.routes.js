@@ -6,7 +6,7 @@ router.post('/', async (req, res) => {
     
     let qString = 'INSERT INTO GRADE VALUES ($1, $2, $3, $4)'
 
-    const grade = req.body.grade - 2
+    const grade = req.body.grade 
     const instructorid = req.body.instructorid
     const learnerid = req.body.learnerid
     const postid = req.body.postid
