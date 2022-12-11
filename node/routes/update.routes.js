@@ -27,7 +27,7 @@ router.post('/', async (req, res) => {
         db.query(userQuery,[title, desc, type, user1, category])
     }
     else {
-        res.status(404);
+        res.status(400);
         res.json({status: "fail"});
         return; 
     }
