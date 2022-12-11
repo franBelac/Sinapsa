@@ -32,6 +32,7 @@ const deleteRouter = require('./routes/delete.routes')
 const updateRouter = require('./routes/update.routes')
 const leadboardRouter = require('./routes/get-leadboard.routes')
 const replyRouter = require('./routes/reply.routes')
+const gradeRouter = require('./routes/grade.routes')
 
 app.use("/login", loginRouter)
 app.use("/register", registerRouter)
@@ -42,6 +43,7 @@ app.use("/delete", deleteRouter)
 app.use("/update", updateRouter)
 app.use("/get-leadboard",leadboardRouter)
 app.use("/reply",replyRouter)
+app.use("/grade",gradeRouter)
 
 
 /*const options = {

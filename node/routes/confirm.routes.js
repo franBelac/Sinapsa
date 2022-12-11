@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router()
-const path = require('path')
 const db = require('../db')
 
 router.get('/:username', async (req, res) => {
@@ -14,7 +13,7 @@ router.get('/:username', async (req, res) => {
         return
     }
 
-    res.status(200).redirect("/")
+    res.status(200).send("<p>Hvala na registraciji " + username +" </p>")
     return
 })
 
