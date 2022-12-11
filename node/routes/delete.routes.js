@@ -12,7 +12,7 @@ router.delete('/', async (req, res) => {
     const id = req.body.id
     const explanation = req.body.explanation
     if(id == undefined || explanation == undefined){
-        res.status(404);
+        res.status(400);
         res.json({status: "fail"})
         return
     }
