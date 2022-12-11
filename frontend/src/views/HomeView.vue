@@ -94,7 +94,7 @@ const reset = () => {
       <div class="btn-group">
         <h5>FILTER BY: </h5>
       </div>
-      <div class="btn-group">
+      <div class="btn-group m-1">
         <button type="button" class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
           {{ currentSmjer }}
         </button>
@@ -104,7 +104,7 @@ const reset = () => {
         </ul>
       </div>
 
-      <div class="btn-group">
+      <div class="btn-group m-1">
         <button type="button" class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
           {{ currentPredmet }}
         </button>
@@ -114,7 +114,7 @@ const reset = () => {
         </ul>
       </div>
 
-      <div class="btn-group">
+      <div class="btn-group m-1">
         <button type="button" class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
           {{ currentKategorija }}
         </button>
@@ -125,7 +125,7 @@ const reset = () => {
         </ul>
       </div>
 
-      <div class="btn-group">
+      <div class="btn-group m-1">
         <button type="button" class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
           {{ currentTip }}
         </button>
@@ -137,7 +137,7 @@ const reset = () => {
       </div>
     </div>
 
-    <div class="btn-group">
+    <div class="btn-group m-1">
       <button type="button" class="btn btn-dark" @click="reset" aria-expanded="false">
         RESET
       </button>
@@ -148,7 +148,7 @@ const reset = () => {
       <Leaderboard />
     </div>
 
-    <footer class="bg-dark text-white text-lg-start fixed-bottom ">
+    <footer class="bg-dark text-white text-lg-start fixed-bottom">
       <div class="text-center ">
         <h5 class="text-uppercase ">Turbulent Tech</h5>
       </div>

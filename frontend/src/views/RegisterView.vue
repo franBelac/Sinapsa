@@ -52,7 +52,7 @@ if (cookies.get('token')) {
 
   <body class="bg-dark h-100">
 
-    <div class="d-flex justify-content-center align-items-center h-100">
+    <div class="d-flex justify-content-center align-items-center h-100 div">
       <div class="card login-form">
         <div class="card-body">
           <h2 class="card-title text-center">Please register!</h2>
@@ -82,7 +82,7 @@ if (cookies.get('token')) {
               <label for="password" class="form-label">Password</label>
               <input type="password" required class="form-control" v-model="password" id="password"
                 placeholder="Please choose your password wisely!" maxlength="30" minlength="8">
-              <button type="submit" class="btn btn-dark w-100 m-1">Log In</button>
+              <button type="submit" class="btn btn-dark w-100 m-1">Register</button>
             </div>
           </form>
         </div>
@@ -91,3 +91,8 @@ if (cookies.get('token')) {
 
   </body>
 </template>
+
+<style>
+
+
+</style>

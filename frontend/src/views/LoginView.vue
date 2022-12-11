@@ -44,11 +44,12 @@ if (cookies.get('token')) {
 
 <template>
 
+
   <body class="bg-dark h-100">
-    <div class="d-flex justify-content-center align-items-center h-100">
+    <div class="d-flex justify-content-center align-items-center text-align-center h-100">
       <div class="card login-form">
         <div class="card-body">
-          <h2 class="card-title text-center">Please login!</h2>
+          <h2 class="card-title text-center">Please log in!</h2>
           <div class="card-text">
             <form @submit.prevent="handleLogin" class="row g-3">
               <div class="col-12">
@@ -69,5 +70,6 @@ if (cookies.get('token')) {
       </div>
     </div>
   </body>
+
 </template>
 
