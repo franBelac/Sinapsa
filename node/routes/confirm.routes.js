@@ -13,7 +13,7 @@ router.get('/:username', async (req, res) => {
         return
     }
 
-    res.status(200).redirect("/")
+    res.status(200).send("<p>Hvala na registraciji " + username +" </p>")
     return
 })
 
