@@ -46,7 +46,7 @@ if (cookies.get('token')) {
 
 
   <body class="bg-dark h-100">
-    <div class="d-flex justify-content-center align-items-center text-align-center h-100">
+    <div class="wrap d-flex justify-content-center align-items-center text-align-center h-100">
       <div class="card login-form">
         <div class="card-body">
           <h2 class="card-title text-center">Please log in!</h2>
@@ -69,7 +69,17 @@ if (cookies.get('token')) {
         </div>
       </div>
     </div>
+
   </body>
 
 </template>
+
+<style>
+
+.wrap {
+  min-height: 100vh;
+  width: 100%;
+}
+
+</style>
 
