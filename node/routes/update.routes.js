@@ -5,8 +5,8 @@ const db = require('../db')
 
 
 
-const userQuery = 'insert into Oglas (oglasTitle, oglasDescription, dateOfCreation, vrstaOglasa, creatorUserID, idKategorije) VALUES ( $1, $2, CURRENT_TIMESTAMP, $3, $4, $5);';
-const userQueryUpdate = 'update Oglas set oglasDescription = $1, oglasTitle = $2 where oglasID = $3;';
+const userQuery = 'insert into Post (postTitle, postDescription, timeOfCreation, typeOfPost, creatorUserID, categoryID) VALUES ( $1, $2, CURRENT_TIMESTAMP, $3, $4, $5);';
+const userQueryUpdate = 'update Post set postDescription = $1, postTitle = $2 where postID = $3;';
 
 router.post('/', async (req, res) => {
     const id = req.body.id
