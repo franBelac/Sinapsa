@@ -13,6 +13,24 @@ const postWCatQuerry = 'select \
     natural join category natural join course\
     join study_programme on course.programmeid = study_programme.programmeid'
 
+router.put('/', async (req,res) => {
+    const title = req.body.title
+    const description = req.body.description
+    const type = req.body.type
+    const creatorId = req.body.creatorId
+    const categoryId = req.body.categoryId
+
+    let qString = 'insert into post values (default, $1, $2, current_date, $3, $4, $5)'
+    let query = await db.query(qString, [title, description, type, creatorId, categoryId])
+
+    if (query.rowCount) {
+        res.status(200).end()
+        return
+    }
+    
+    res.status(500).end()
+})
+
 router.get('/', async (req, res) => {
     
     const postId = req.body.postId 
