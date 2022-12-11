@@ -28,13 +28,14 @@ const registerRouter = require('./routes/register.routes')
 const confirmRouter = require('./routes/confirm.routes')
 const deleteRouter = require('./routes/delete.routes')
 const updateRouter = require('./routes/update.routes')
+const leadboardRouter = require('./routes/get-leadboard.routes')
 
 app.use("/login", loginRouter)
 app.use("/register", registerRouter)
 app.use("/delete", deleteRouter)
 app.use("/update", updateRouter)
 app.use("/confirm",confirmRouter)
-
+app.use("/get-leadboard",leadboardRouter)
 
 
 /*const options = {

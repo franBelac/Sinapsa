@@ -18,13 +18,18 @@ router.post('/', async (req, res) => {
     const category = req.body.category
     
     
-    if(id){
+    if(id && desc && title){
         db.query(userQueryUpdate,[desc, title, id])
     }
-    else{
+    else if (title && desc && type && category){
         console.log(title, desc, type, user, category)
         const user1 = 1
         db.query(userQuery,[title, desc, type, user1, category])
+    }
+    else {
+        res.status(404);
+        res.json({status: "fail"});
+        return; 
     }
 
     res.json({status: "success"})

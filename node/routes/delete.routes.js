@@ -11,20 +11,25 @@ const userQuery3 = 'insert into deletedpost(explanation, deletoruserid, postid) 
 router.delete('/', async (req, res) => {
     const id = req.body.id
     const explanation = req.body.explanation
+    if(id == undefined || explanation == undefined){
+        res.status(404);
+        res.json({status: "fail"})
+        return
+    }
     const post = await db.query(userQuery2,[id])
     
     if(post.rowCount > 0){
-///        db.query(userQuery1,[id])
-        console.log(post)
-        help = post.rows[0].creatoruserid
-        db.query(userQuery3,[explanation,help,id])
+        db.query(userQuery1,[id])
+///        console.log(post)
+///        help = post.rows[0].creatoruserid
+///        db.query(userQuery3,[explanation,help,id])
         
         res.json({status: "success"})
         return    
     }
     res.status(404);
     res.json({status: "fail"})
-        return   
+    return   
     
 })
 
