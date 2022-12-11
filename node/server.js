@@ -32,7 +32,8 @@ const updateRouter = require('./routes/update.routes')
 app.use("/login", loginRouter)
 app.use("/register", registerRouter)
 app.use("/delete", deleteRouter)
-app.use("/update", updateRouter)app.use("/confirm",confirmRouter)
+app.use("/update", updateRouter)
+app.use("/confirm",confirmRouter)
 
 
 
