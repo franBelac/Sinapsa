@@ -28,16 +28,22 @@ const registerRouter = require('./routes/register.routes')
 const postRouter = require('./routes/post.routes')
 const userRouter = require('./routes/user.routes')
 const confirmRouter = require('./routes/confirm.routes')
+const deleteRouter = require('./routes/delete.routes')
+const updateRouter = require('./routes/update.routes')
+const leadboardRouter = require('./routes/get-leadboard.routes')
 const replyRouter = require('./routes/reply.routes')
-
 
 app.use("/login", loginRouter)
 app.use("/register", registerRouter)
 app.use("/post", postRouter)
 app.use("/user", userRouter)
 app.use("/confirm",confirmRouter)
+app.use("/delete", deleteRouter)
+app.use("/update", updateRouter)
+app.use("/get-leadboard",leadboardRouter)
 app.use("/reply",replyRouter)
 
+>>>>>>> node/server.js
 
 
 /*const options = {
