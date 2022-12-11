@@ -27,7 +27,7 @@ async function sendConfirmationEmail(email,username){
     from: 'turbulentech@gmail.com', // sender address
     to: email, // list of receivers
     subject: "Email confirmation", // Subject line
-    text: "Hi!\n\nPlease go to " + link + " to confirm your email\nThank you\nTurbulentech" // plain text body
+    text: "Hi!\n\nPlease go to " + link + " to confirm your email.\nThank you!\nTurbulentech" // plain text body
     //html: "<b>Hello world?</b>" // html body
   });
 
