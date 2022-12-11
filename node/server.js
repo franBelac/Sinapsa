@@ -43,8 +43,6 @@ app.use("/update", updateRouter)
 app.use("/get-leadboard",leadboardRouter)
 app.use("/reply",replyRouter)
 
->>>>>>> node/server.js
-
 
 /*const options = {
     key: fs.readFileSync('localhost-key.pem'),
