@@ -27,11 +27,15 @@ const loginRouter = require('./routes/login.routes')
 const registerRouter = require('./routes/register.routes')
 const postRouter = require('./routes/post.routes')
 const userRouter = require('./routes/user.routes')
+const confirmRouter = require('./routes/confirm.routes')
+
 
 app.use("/login", loginRouter)
 app.use("/register", registerRouter)
 app.use("/post", postRouter)
 app.use("/user", userRouter)
+app.use("/confirm",confirmRouter)
+>>>>>>> node/server.js
 
 
 
