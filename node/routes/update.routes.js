@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const path = require('path')
 const db = require('../db')
+const jwt = require('jsonwebtoken');
 
 
 
@@ -14,24 +15,37 @@ router.post('/', async (req, res) => {
     const desc = req.body.description
 
     const type = req.body.type
-    const user = req.session.user
+    
     const category = req.body.category
-    
-    
-    if(id && desc && title){
-        db.query(userQueryUpdate,[desc, title, id])
-    }
-    else if (title && desc && type && category){
-        console.log(title, desc, type, user, category)
-        const user1 = 1
-        db.query(userQuery,[title, desc, type, user1, category])
-    }
-    else {
-        res.status(400);
-        res.json({status: "fail"});
-        return; 
-    }
+    const secretKey = "tajnikljuc"
 
+    const token = req.headers['authorization'];
+    jwt.verify(token, secretKey, (err, decoded) => {
+        if (err) {
+            res.status(401)
+            res.json({})
+          return
+        } 
+        else {
+            const payload = decoded;
+            console.log(payload);
+            const user = payload.id
+        
+    
+            if(id && desc && title){
+                db.query(userQueryUpdate,[desc, title, id])
+            }
+            else if (title && desc && type && category){
+                console.log(title, desc, type, user, category)
+                db.query(userQuery,[title, desc, type, user, category])
+            }
+            else {
+                res.status(400);
+                res.json({status: "fail"});
+                return; 
+            }
+        }
+    });
     res.json({status: "success"})
     return
 })

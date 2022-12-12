@@ -27,7 +27,7 @@ router.get('/', async (req, res) => {
         return
     }
     const user = users.rows[0]
-    const token = jwt.sign({ id: user.userid, username: user.username, role: "user"}, secretKey, { expiresIn: '1h' })
+    const token = jwt.sign({ id: user.userid, username: user.username, role: "user"}, secretKey, { expiresIn: '24h' })
 
     req.session.user = username
     res.json({token})
