@@ -2,7 +2,8 @@ const express = require('express')
 const router = express.Router()
 const path = require('path')
 const db = require('../db')
-
+const jwt = require('jsonwebtoken');
+const secretKey = "tajnikljuc"
 
 
 const userQuery = 'select * from registered where username = $1 and password = $2 and created is not null';
@@ -25,8 +26,11 @@ router.get('/', async (req, res) => {
         res.json({status: 'failed'})
         return
     }
+    const user = users.rows[0]
+    const token = jwt.sign({ id: user.userid, username: user.username, role: "user"}, secretKey, { expiresIn: '1h' })
+
     req.session.user = username
-    res.json({status: "success"})
+    res.json({token})
     return
 })
 
