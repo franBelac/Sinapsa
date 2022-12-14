@@ -10,9 +10,162 @@ const fetchedPosts = fetch("http://localhost:3001/post/all")
   .then(() => {
     console.log(posts);
   });
+
+const currentSmjer = ref("SMJER");
+
+const currentPredmet = ref("PREDMET");
+
+const currentTip = ref("TIP");
+
+const currentKategorija = ref("KATEGORIJA");
+
+const smjerovi = ["R", "E"];
+
+const predmeti = [
+  "Matan 1",
+  "Uvod u programiranje",
+  "Prevođenje programskih jezika",
+];
+
+const kategorije = ["Međuispit", "Laboratorijske vježbe"];
+
+const tipovi = ["Nudim", "Tražim"];
+
+const setFilter = (filterType, newValue) => {
+  if (filterType === "smjer") {
+    currentSmjer.value = newValue;
+  } else if (filterType === "predmet") {
+    currentPredmet.value = newValue;
+  } else if (filterType === "kategorija") {
+    currentKategorija.value = newValue;
+  } else if (filterType === "tip") {
+    currentTip.value = newValue;
+  }
+};
+
+const filter = () => {
+  if (currentSmjer.value == "SMJER") {
+    currentSmjer.value = null;
+  }
+  if (currentPredmet.value == "PREDMET") {
+    currentPredmet.value = null;
+  }
+  if (currentKategorija.value == "KATEGORIJA") {
+    currentKategorija.value = null;
+  }
+  if (currentTip.value == "TIP") {
+    currentTip.value = null;
+  }
+  const filterObject = {
+    smjer: currentSmjer.value,
+    predmet: currentPredmet.value,
+    kategorija: currentKategorija.value,
+    tip: currentTip.value,
+  };
+  currentSmjer.value = "SMJER";
+  currentPredmet.value = "PREDMET";
+  currentKategorija.value = "KATEGORIJA";
+  currentTip.value = "TIP";
+};
 </script>
 
 <template>
+  <div class="m-1">
+    <div class="btn-group">
+      <h5>FILTER BY:</h5>
+    </div>
+    <div class="btn-group m-1">
+      <button
+        type="button"
+        class="btn btn-dark dropdown-toggle"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        {{ currentSmjer }}
+      </button>
+      <ul class="dropdown-menu">
+        <li
+          class="dropdown-item"
+          v-for="smjer in smjerovi"
+          @click="setFilter('smjer', smjer)"
+        >
+          {{ smjer }}
+        </li>
+      </ul>
+    </div>
+
+    <div class="btn-group m-1">
+      <button
+        type="button"
+        class="btn btn-dark dropdown-toggle"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        {{ currentPredmet }}
+      </button>
+      <ul class="dropdown-menu">
+        <li
+          class="dropdown-item"
+          v-for="predmet in predmeti"
+          @click="setFilter('predmet', predmet)"
+        >
+          {{ predmet }}
+        </li>
+      </ul>
+    </div>
+
+    <div class="btn-group m-1">
+      <button
+        type="button"
+        class="btn btn-dark dropdown-toggle"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        {{ currentKategorija }}
+      </button>
+      <ul class="dropdown-menu">
+        <li
+          class="dropdown-item"
+          v-for="kategorija in kategorije"
+          @click="setFilter('kategorija', kategorija)"
+        >
+          {{ kategorija }}
+        </li>
+      </ul>
+    </div>
+
+    <div class="btn-group m-1">
+      <button
+        type="button"
+        class="btn btn-dark dropdown-toggle"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        {{ currentTip }}
+      </button>
+      <ul class="dropdown-menu">
+        <li
+          class="dropdown-item"
+          v-for="tip in tipovi"
+          @click="setFilter('tip', tip)"
+        >
+          {{ tip }}
+        </li>
+      </ul>
+    </div>
+
+    <div class="btn-group m-1">
+      <button
+        type="button"
+        class="btn btn-primary"
+        @click="filter"
+        aria-expanded="false"
+      >
+        FILTER
+      </button>
+    </div>
+  </div>
+
   <div class="col-md-8 p-3 pt-5">
     <div
       v-for="post in posts"
