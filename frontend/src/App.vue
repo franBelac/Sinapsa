@@ -44,7 +44,3 @@ const handleLogout = () => {
   </nav>
   <RouterView />
 </template>
-
-<style>
-
-</style>
