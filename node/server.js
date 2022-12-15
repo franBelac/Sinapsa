@@ -36,6 +36,7 @@ const leadboardRouter = require('./routes/get-leadboard.routes')
 const replyRouter = require('./routes/reply.routes')
 const gradeRouter = require('./routes/grade.routes')
 const filterRouter = require('./routes/filter.routes')
+const infoRouter = require('./routes/info.routes')
 
 app.use("/login", loginRouter)
 app.use("/register", registerRouter)
@@ -54,6 +55,7 @@ app.use("/post", postRouter);
 app.use("/user", userRouter);
 app.use("/confirm", confirmRouter);
 app.use("/reply", replyRouter);
+app.use("/info", infoRouter);
 
 /*const options = {
     key: fs.readFileSync('localhost-key.pem'),
