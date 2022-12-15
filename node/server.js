@@ -35,6 +35,7 @@ const updateRouter = require('./routes/update.routes')
 const leadboardRouter = require('./routes/get-leadboard.routes')
 const replyRouter = require('./routes/reply.routes')
 const gradeRouter = require('./routes/grade.routes')
+const filterRouter = require('./routes/filter.routes')
 
 app.use("/login", loginRouter)
 app.use("/register", registerRouter)
@@ -46,7 +47,7 @@ app.use("/update", updateRouter)
 app.use("/get-leadboard",leadboardRouter)
 app.use("/reply",replyRouter)
 app.use("/grade",gradeRouter)
-
+app.use("/filter",filterRouter)
 app.use("/login", loginRouter);
 app.use("/register", registerRouter);
 app.use("/post", postRouter);
