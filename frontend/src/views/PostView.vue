@@ -1,9 +1,14 @@
 <script setup>
-import { useRoute } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { ref } from "vue";
-import { onMounted } from "vue";
+import { useCookies } from "vue3-cookies";
+const { cookies } = useCookies();
 
-let proba;
+const reply = ref("");
+const showOpts = ref(false);
+const replies = ref([]);
+const username = cookies.get("username");
+const router = useRouter();
 const route = useRoute();
 const post = ref({
   postTitle: "posttitle",
@@ -16,16 +21,33 @@ const post = ref({
 fetch(`http://localhost:3001/post/distinct/${route.params.postId}`)
   .then((res) => res.json())
   .then((res) => {
-    console.log("oke sad ide na post.value", res);
     post.value = res;
+    console.log(post.value.username, username);
+    if (post.value.username === username) {
+      showOpts = true;
+    }
   });
 
-const fetchUser = async (id) => {
-  console.log("executing fetchUser");
-  const res = await fetch(`http://localhost:3001/post/distinct/${id}`);
-  const data = await res.json();
-  console.log(data);
-  post.value = data;
+fetch(`http://localhost:3001/post/comments/${route.params.postId}`)
+  .then((res) => res.json())
+  .then((res) => {
+    replies.value = res;
+  });
+
+const postReply = () => {
+  fetch("http://localhost:3001/reply", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      replyText: reply,
+      replyCreatorId: 2,
+      postId: route.params.postId,
+    }),
+  });
+
+  router.go();
 };
 </script>
 
@@ -41,7 +63,6 @@ const fetchUser = async (id) => {
               class="text-decoration-none ms-2"
               style="font-size: 16px"
             >
-              <span class="align-middle">{{ post.username }}</span>
             </a>
             <span class="ms-2 align-middle" style="font-size: 14px">
               {{ post.dateOfCreation }}
@@ -59,7 +80,11 @@ const fetchUser = async (id) => {
         <div
           class="col-12 col-sm-3 d-flex align-items-center justify-content-end"
         >
-          <button type="button" class="btn btn-labeled btn-success mx-1">
+          <button
+            type="button"
+            class="btn btn-labeled btn-success mx-1"
+            v-if="showOpts"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -73,7 +98,11 @@ const fetchUser = async (id) => {
               ></path>
             </svg>
           </button>
-          <button type="button" class="btn btn-labeled btn-danger mx-1">
+          <button
+            type="button"
+            class="btn btn-labeled btn-danger mx-1"
+            v-if="showOpts"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -101,23 +130,16 @@ const fetchUser = async (id) => {
       </div>
     </div>
 
-    <div class="w-75 mx-auto">
+    <div class="w-75 mx-auto" v-for="oneReply in replies">
       <div class="shadow w-100 bg-light p-2 row rounded my-4 mx-auto row">
         <div class="p-3 col-12 col-sm-9" style="font-size: 18px">
-          lorem ipsum dolor <br />
-          ovaj odg ide kroz vise linija <br />
+          {{ oneReply.replytext }}
         </div>
         <div class="col-12 col-sm-3">
           <div class="d-flex justify-content-end align-items-center h-25">
-            <a
-              href="username.com"
-              class="text-decoration-none ms-2"
-              style="font-size: 16px"
-            >
-              <span class="align-middle">username</span>
-            </a>
+            <span class="align-middle">{{ oneReply.username }}</span>
             <span class="ms-2 align-middle" style="font-size: 14px">
-              21.12.2021 9:50
+              {{ oneReply.replycreated }}
             </span>
           </div>
           <div class="h-75 d-flex align-items-center justify-content-end">
@@ -184,12 +206,16 @@ const fetchUser = async (id) => {
     >
       <form class="form-group mx-auto w-75 h-100">
         <textarea
-          id="reply"
+          v-model="reply"
           class="rounded bg-light mx-auto w-100"
           style="height: 140px"
         ></textarea>
         <div class="d-flex justify-content-end mb-3 h-25">
-          <button class="btn btn-success" style="height: 35px">
+          <button
+            class="btn btn-success"
+            style="height: 35px"
+            @click="postReply"
+          >
             Post reply
           </button>
         </div>

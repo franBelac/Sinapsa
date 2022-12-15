@@ -1,14 +1,24 @@
 <script setup>
 import { ref } from "vue";
-
-let posts = ref([]);
-const fetchedPosts = fetch("http://localhost:3001/post/all")
+import { useRouter, useRoute } from "vue-router";
+const router = useRouter();
+const route = useRoute();
+const posts = ref([]);
+fetch("http://localhost:3001/post/all")
   .then((response) => response.json())
   .then((fetchedObject) => {
     posts.value = fetchedObject.posts;
-  })
-  .then(() => {
-    console.log(posts);
+  });
+
+let predmeti = ref([]);
+
+let kategorije = ref([]);
+
+fetch("http://localhost:3001/info")
+  .then((response) => response.json())
+  .then((fetchedObject) => {
+    predmeti.value = fetchedObject.courses;
+    kategorije.value = fetchedObject.categories;
   });
 
 const currentSmjer = ref("SMJER");
@@ -21,23 +31,15 @@ const currentKategorija = ref("KATEGORIJA");
 
 const smjerovi = ["R", "E"];
 
-const predmeti = [
-  "Matan 1",
-  "Uvod u programiranje",
-  "Prevođenje programskih jezika",
-];
-
-const kategorije = ["Međuispit", "Laboratorijske vježbe"];
-
 const tipovi = ["Nudim", "Tražim"];
 
 const setFilter = (filterType, newValue) => {
   if (filterType === "smjer") {
     currentSmjer.value = newValue;
   } else if (filterType === "predmet") {
-    currentPredmet.value = newValue;
+    currentPredmet.value = newValue.abbreviationcourse;
   } else if (filterType === "kategorija") {
-    currentKategorija.value = newValue;
+    currentKategorija.value = newValue.categoryname;
   } else if (filterType === "tip") {
     currentTip.value = newValue;
   }
@@ -57,16 +59,43 @@ const filter = () => {
     currentTip.value = null;
   }
   const filterObject = {
-    smjer: currentSmjer.value,
-    predmet: currentPredmet.value,
-    kategorija: currentKategorija.value,
-    tip: currentTip.value,
+    programename: currentSmjer.value,
+    abbreviationcourse: currentPredmet.value,
+    categoryname: currentKategorija.value,
+    typeofpost: currentTip.value,
   };
+
+  fetch("http://localhost:3001/filter", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(filterObject),
+  })
+    .then((response) => response.json())
+    .then((fetchedObject) => {
+      console.log(fetchedObject);
+      posts.value = fetchedObject.posts;
+    });
+
   currentSmjer.value = "SMJER";
   currentPredmet.value = "PREDMET";
   currentKategorija.value = "KATEGORIJA";
   currentTip.value = "TIP";
 };
+
+function pushWithQuery(query) {
+  router.push({
+    name: "post",
+    query: {
+      ...route.query,
+      ...query,
+    },
+    params: {
+      postId: query,
+    },
+  });
+}
 </script>
 
 <template>
@@ -109,7 +138,7 @@ const filter = () => {
           v-for="predmet in predmeti"
           @click="setFilter('predmet', predmet)"
         >
-          {{ predmet }}
+          {{ predmet.abbreviationcourse }}
         </li>
       </ul>
     </div>
@@ -129,7 +158,7 @@ const filter = () => {
           v-for="kategorija in kategorije"
           @click="setFilter('kategorija', kategorija)"
         >
-          {{ kategorija }}
+          {{ kategorija.categoryname }}
         </li>
       </ul>
     </div>
@@ -173,6 +202,9 @@ const filter = () => {
     >
       <div class="d-flex align-items-center">
         <h1 class="w-75">{{ post.posttitle }}</h1>
+        <button class="btn btn-primary" @click="pushWithQuery(post.postid)">
+          Otvori
+        </button>
         <div class="w-25">
           <div class="d-flex justify-content-end align-items-center">
             <span class="align-middle">{{ post.username }}</span>
