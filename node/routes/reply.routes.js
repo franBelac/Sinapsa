@@ -57,5 +57,36 @@ router.post('/decline/:replyid', async (req,res) => {
     res.status(404).end()
 })
 
+
+
+router.get('/get/:replyid', async (req,res) => {
+    const replyid = req.params.replyid
+    const getQuerry = "select * from replies where replyid = $1"
+    let reply = await db.query(getQuerry, [replyid])
+    if(reply) {
+        rv = reply.rows[0]
+        res.json({reply: rv})
+        res.status(200)
+        return
+    }
+    res.status(404)
+    return    
+})
+
+router.get('/getall/:postid', async (req,res) => {
+    const postid = req.params.postid
+    const getQuerry = "select * from replies where postid = $1"
+    let reply = await db.query(getQuerry, [postid])
+    if(reply) {
+        rv = reply.rows
+        res.json({replies: rv})
+        res.status(200)
+        return
+    }
+    res.status(404)
+    return  
+    
+})
+
 module.exports = router
 
