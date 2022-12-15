@@ -29,7 +29,7 @@ router.post('/', async (req, res) => {
 
     console.log(qString)
 
-    /*
+    
         try {
             const query = await db.query(qString, [])
             console.log(qString)
@@ -37,13 +37,7 @@ router.post('/', async (req, res) => {
             res.status(200).json(body);
         } catch (DatabaseError) {
             res.status(400).json({error: "Database error"})
-        }*/
-
-        const query = await db.query(qString, [])
-        console.log(qString)
-        body.posts = query.rows;
-        res.status(200).json(body);
-
+        }
 })
 
 module.exports = router
