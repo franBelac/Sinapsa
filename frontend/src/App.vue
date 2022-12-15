@@ -1,27 +1,35 @@
 <script setup>
 import { RouterLink, RouterView } from "vue-router";
-import { storeToRefs } from 'pinia'
-import { useCredentialsStore } from './stores/credentials'
-import { useCookies } from 'vue3-cookies'
-const credentialsStore = useCredentialsStore()
-const { username, token } = storeToRefs(credentialsStore)
-const { cookies } = useCookies()
-token.value = cookies.get('token')
-username.value = cookies.get('username')
-const handleLogout = () => {
-  credentialsStore.$reset()
-  cookies.remove('token')
-  cookies.remove('username')
-}
+import { storeToRefs } from "pinia";
+import { useCredentialsStore } from "./stores/credentials";
+import { useCookies } from "vue3-cookies";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
+const credentialsStore = useCredentialsStore();
+const { username, token } = storeToRefs(credentialsStore);
+const { cookies } = useCookies();
+token.value = cookies.get("token");
+username.value = cookies.get("username");
+const handleLogout = () => {
+  credentialsStore.$reset();
+  cookies.remove("token");
+  cookies.remove("username");
+  router.push("/");
+};
 </script>
 
 <template>
   <nav class="navbar navbar-expand-md navbar-dark bg-dark">
     <div class="container">
       <RouterLink to="/" class="navbar-brand">Sinappsa</RouterLink>
-      <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav"
-        aria-label="Expand Navigation">
+      <button
+        class="navbar-toggler"
+        data-bs-toggle="collapse"
+        data-bs-target="#nav"
+        aria-controls="nav"
+        aria-label="Expand Navigation"
+      >
         <div class="navbar-toggler-icon"></div>
       </button>
       <div class="collapse navbar-collapse justify-content-end" id="nav">
@@ -36,7 +44,15 @@ const handleLogout = () => {
             <RouterLink to="/register" class="nav-link">Register</RouterLink>
           </li>
           <li class="nav-item" v-if="token">
-            <button @click="handleLogout" class="nav-link btn btn-outline-secondary">Logout</button>
+            <RouterLink to="/profile" class="nav-link">My Profile</RouterLink>
+          </li>
+          <li class="nav-item" v-if="token">
+            <button
+              @click="handleLogout"
+              class="nav-link btn btn-outline-secondary"
+            >
+              Logout
+            </button>
           </li>
         </ul>
       </div>
@@ -44,7 +60,3 @@ const handleLogout = () => {
   </nav>
   <RouterView />
 </template>
-
-<style>
-
-</style>

@@ -5,21 +5,18 @@ const db = require('../db')
 const jwt = require('jsonwebtoken');
 const secretKey = "tajnikljuc"
 
+router.post("/", async (req, res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+    if (username == undefined || password == undefined) {
+        res.status(400);
+        res.json({ status: "fail" });
+        return;
+    }
 
-const userQuery = 'select * from registered where username = $1 and password = $2 and created is not null';
+    const users = await db.query(userQuery, [username, password]);
 
 
-router.get('/', async (req, res) => {
-    const username = req.body.username
-    const password = req.body.password
-    if (username == undefined || password == undefined )
-        {
-            res.status(400);
-            res.json({status: "fail"})
-            return
-        }
-
-    const users = await db.query(userQuery,[username, password])
 
     if(users.rowCount == 0) {
         res.status(401)
@@ -34,4 +31,4 @@ router.get('/', async (req, res) => {
     return
 })
 
-module.exports = router
+module.exports = router;

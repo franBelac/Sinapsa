@@ -1,24 +1,26 @@
-const express = require('express')
-const path = require('path')
-const bodyParser = require('body-parser');
-const session = require('express-session')
+const express = require("express");
+const path = require("path");
+const bodyParser = require("body-parser");
+const session = require("express-session");
+const cors = require("cors");
 
+const https = require("https");
+const fs = require("fs");
 
-const https = require('https');
-const fs = require('fs');
+const app = express();
 
+app.use(cors());
 
-const app = express()
-
-
-app.use(session({
-    secret: 'keyboard cat',
+app.use(
+  session({
+    secret: "keyboard cat",
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: true }
-}));
+    cookie: { secure: true },
+  })
+);
 
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -33,6 +35,8 @@ const updateRouter = require('./routes/update.routes')
 const leadboardRouter = require('./routes/get-leadboard.routes')
 const replyRouter = require('./routes/reply.routes')
 const gradeRouter = require('./routes/grade.routes')
+const filterRouter = require('./routes/filter.routes')
+const infoRouter = require('./routes/info.routes')
 
 app.use("/login", loginRouter)
 app.use("/register", registerRouter)
@@ -44,7 +48,14 @@ app.use("/update", updateRouter)
 app.use("/get-leadboard",leadboardRouter)
 app.use("/reply",replyRouter)
 app.use("/grade",gradeRouter)
-
+app.use("/filter",filterRouter)
+app.use("/login", loginRouter);
+app.use("/register", registerRouter);
+app.use("/post", postRouter);
+app.use("/user", userRouter);
+app.use("/confirm", confirmRouter);
+app.use("/reply", replyRouter);
+app.use("/info", infoRouter);
 
 /*const options = {
     key: fs.readFileSync('localhost-key.pem'),
@@ -53,5 +64,4 @@ app.use("/grade",gradeRouter)
   
 https.createServer(options, app).listen(8080);*/
 
-app.listen(3001)
-
+app.listen(3001);
