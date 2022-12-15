@@ -9,7 +9,7 @@ const password = ref("");
 const credentials = useCredentialsStore();
 const { cookies } = useCookies();
 const handleLogin = () => {
-  fetch("http://ax1.axiros.hr:8080/login/", {
+  fetch("http://localhost:3001/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -20,15 +20,15 @@ const handleLogin = () => {
     }),
   })
     .then((res) => {
-      console.log(res);
       if (!(res.status === 200)) {
         alert("Unsuccessful login!");
         throw Error("Unsuccessful login!");
       }
+      return res.json();
     })
     .then((res) => {
       credentials.username = username.value;
-      credentials.token = "jwt_baticee";
+      credentials.token = res.token;
       cookies.set("token", credentials.token);
       cookies.set("username", credentials.username);
       router.push({ name: "home" });

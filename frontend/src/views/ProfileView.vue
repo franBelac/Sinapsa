@@ -46,6 +46,12 @@ function pushWithQuery(query) {
     },
   });
 }
+
+const newPost = () => {
+  router.push({
+    name: "create",
+  });
+};
 </script>
 
 <template>
@@ -62,7 +68,10 @@ function pushWithQuery(query) {
           ><br />
           <label>{{ user.firstname }} {{ user.lastname }}</label
           ><br />
-          <label>{{ user.email }}</label>
+          <p>{{ user.email }}</p>
+          <button class="btn btn-labeled btn-success mx-1" @click="newPost">
+            Novi oglas
+          </button>
         </div>
       </div>
 
