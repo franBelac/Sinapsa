@@ -17,11 +17,11 @@ async function updateReplyStatus(value, replyid) {
 
 router.put('/', async (req,res) =>{
     console.log(req.body)
-    const replyText = req.body.replyText
-    const replyCreatorId = req.body.replyCreatorId
-    const postId = req.body.postId
+    const replyText = req.body.replytext
+    const replyCreatorId = req.body.replycreatorid
+    const postId = req.body.postid
 
-    let qString = "insert into replies values(default, $1, current_date, 'active', $2, $3)"
+    let qString = "insert into replies values(default, $1, current_date, 'aktivan', $2, $3)"
     let query = await db.query(qString, [replyText, replyCreatorId, postId])
     console.log(query)
 

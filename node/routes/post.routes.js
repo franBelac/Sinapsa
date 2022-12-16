@@ -5,25 +5,24 @@ const path = require("path");
 const db = require("../db");
 
 const postWCatQuerry =
-  "select \
-    postid, posttitle, postdescription, username, timeofcreation, categoryname, abbreviationcourse, programename, typeofpost as postType \
+  'select \
+    postid, posttitle, postdescription, username, timeofcreation, categoryname, abbreviationcourse, programename \
     from post join registered on post.creatoruserid = registered.userid \
     natural join category natural join course\
-    join study_programme on course.programmeid = study_programme.programmeid";
+    join study_programme on course.programmeid = study_programme.programmeid';
 
 router.put("/", async (req, res) => {
   const title = req.body.title;
   const description = req.body.description;
   const type = req.body.type;
-  const creatorId = req.body.creatorId;
-  const categoryId = req.body.categoryId;
+  const creatorId = req.body.creatorid;
+  const categoryId = req.body.categoryid;
 
   let qString =
-    "insert into post values (default, $1, $2, current_date, $3, $4, $5)";
+    "insert into post values (default, $1, $2, current_date, $3, $4)";
   let query = await db.query(qString, [
     title,
     description,
-    type,
     creatorId,
     categoryId,
   ]);

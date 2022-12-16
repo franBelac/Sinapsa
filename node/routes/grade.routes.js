@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const db = require('../db')
 
-router.post('/', async (req, res) => {
+router.put('/', async (req, res) => {
     
     let qString = 'INSERT INTO GRADE VALUES ($1, $2, $3, $4)'
 

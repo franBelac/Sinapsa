@@ -19,12 +19,11 @@ router.post('/', async (req, res) => {
     console.log(categoryname)
     console.log(typeofpost)
 
-    if(programename===null)  programename='%'
-    if(abbreviationcourse===null)  abbreviationcourse='%'
-    if(categoryname===null)  categoryname='%'
-    if(typeofpost===null)  typeofpost='%'
+    if(programename==null)  programename='%'
+    if(abbreviationcourse==null)  abbreviationcourse='%'
+    if(categoryname==null)  categoryname='%'
 
-    let qString = "select post.postid, post.posttitle, post.postdescription, post.timeofcreation, post.typeofpost, post.creatoruserid, post.categoryid from post natural join category natural join course natural join study_programme where programename like '" + programename + "' and abbreviationcourse like '" + abbreviationcourse + "' and categoryname like '" + categoryname + "' and typeofpost like '" + typeofpost + "'"
+    let qString = "select post.postid, post.posttitle, post.postdescription, post.timeofcreation, post.creatoruserid, post.categoryid from post natural join category natural join course natural join study_programme where programename like '" + programename + "' and abbreviationcourse like '" + abbreviationcourse + "' and categoryname like '" + categoryname + "'"
 
 
     console.log(qString)
