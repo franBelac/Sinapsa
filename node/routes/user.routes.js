@@ -32,7 +32,7 @@ router.get('/replies/:id', async (req,res) => {
     const id = req.params.id
 
     let qString = 'select replyid, replytext, postid from replies where \
-    replycreatorid = $1 and statusvalue = \'active\';'
+    replycreatorid = $1 and statusvalue = \'aktivan\';'
     let query = await db.query(qString,[id])
 
     res.status(200).json(query.rows)
