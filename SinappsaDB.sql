@@ -49,7 +49,6 @@ CREATE TABLE POST
   postTitle VARCHAR(100) NOT NULL,
   postDescription VARCHAR(1000) NOT NULL,
   timeOfCreation DATE NOT NULL,
-  typeOfPost VARCHAR(100) NOT NULL,
   creatorUserID INT NOT NULL,
   categoryID INT NOT NULL,
   FOREIGN KEY (creatorUserID) REFERENCES REGISTERED(userID),
@@ -153,31 +152,31 @@ INSERT INTO CATEGORY VALUES (DEFAULT, 'ZI', 3);
 
 INSERT INTO CATEGORY VALUES (DEFAULT, 'BLIC', 4);
 
-INSERT INTO POST VALUES (DEFAULT,'Oglas 1', 'Opis tražim pomoć','15.1.2022','tražim',1,1);
+INSERT INTO POST VALUES (DEFAULT,'Oglas 1', 'Opis tražim pomoć','15.1.2022',1,1);
 
-INSERT INTO POST VALUES (DEFAULT,'Oglas 2', 'Opis nudim pomoć','20.1.2022','nudim',1,1);
+INSERT INTO POST VALUES (DEFAULT,'Oglas 2', 'Opis nudim pomoć','20.1.2022',1,1);
 
-INSERT INTO POST VALUES (DEFAULT,'Oglas 3', 'Opis nudim pomoć','20.1.2022','nudim',1,2);
+INSERT INTO POST VALUES (DEFAULT,'Oglas 3', 'Opis nudim pomoć','20.1.2022',1,2);
 
-INSERT INTO POST VALUES (DEFAULT,'Oglas 4', 'Trebam pomoć iz VIS-a!!! ','20.1.2022','tražim',5,3);
+INSERT INTO POST VALUES (DEFAULT,'Oglas 4', 'Trebam pomoć iz VIS-a!!! ','20.1.2022',5,3);
 
-INSERT INTO POST VALUES (DEFAULT,'Oglas 5', 'Nudim instrukcije iz Objektno orjentiranog programiranja','12.12.2022','nudim',4,1);
+INSERT INTO POST VALUES (DEFAULT,'Oglas 5', 'Nudim instrukcije iz Objektno orjentiranog programiranja','12.12.2022',4,1);
 
-INSERT INTO POST VALUES (DEFAULT,'Oglas 6', 'Trebam pomoć iz VIS-a!!! ','20.1.2022','tražim',9,3);
+INSERT INTO POST VALUES (DEFAULT,'Oglas 6', 'Trebam pomoć iz VIS-a!!! ','20.1.2022',9,3);
 
-INSERT INTO POST VALUES (DEFAULT,'Oglas 7', 'Krugovi su teški, trebam pomoć!?','10.7.2022','tražim',8,1);
+INSERT INTO POST VALUES (DEFAULT,'Oglas 7', 'Krugovi su teški, trebam pomoć!?','10.7.2022',8,1);
 
-INSERT INTO POST VALUES (DEFAULT,'Oglas 8', 'Nudim pripreme za blic iz Javne rasvjete','10.4.2022','nudim',4,4);
+INSERT INTO POST VALUES (DEFAULT,'Oglas 8', 'Nudim pripreme za blic iz Javne rasvjete','10.4.2022',4,4);
 
-INSERT INTO POST VALUES (DEFAULT,'Oglas 9', 'Nudim instrukcije iz Jave','2.12.2022','nudim',8,4);
+INSERT INTO POST VALUES (DEFAULT,'Oglas 9', 'Nudim instrukcije iz Jave','2.12.2022',8,4);
 
-INSERT INTO POST VALUES (DEFAULT,'Oglas 10', 'Trebam pomoć iz ASP-a ASAP','13.12.2022','tražim',2,4);
+INSERT INTO POST VALUES (DEFAULT,'Oglas 10', 'Trebam pomoć iz ASP-a ASAP','13.12.2022',2,4);
 
-INSERT INTO POST VALUES (DEFAULT,'Oglas 11', 'Trebam pomoć iz BAZA','10.11.2022','tražim',3,1);
+INSERT INTO POST VALUES (DEFAULT,'Oglas 11', 'Trebam pomoć iz BAZA','10.11.2022',3,1);
 
-INSERT INTO POST VALUES (DEFAULT,'Oglas 12', 'Trebam pomoć iz Robotike','11.11.2022','tražim',6,1);
+INSERT INTO POST VALUES (DEFAULT,'Oglas 12', 'Trebam pomoć iz Robotike','11.11.2022',6,1);
 
-INSERT INTO POST VALUES (DEFAULT,'Oglas 13', 'Pišem šalabahtere za TINF','11.11.2022','nudim',7,1);
+INSERT INTO POST VALUES (DEFAULT,'Oglas 13', 'Pišem šalabahtere za TINF','11.11.2022',7,1);
 
 INSERT INTO REPLIES VALUES (DEFAULT,'reply text neki', '28.1.2022','aktivan', 2, 1);
 
