@@ -53,7 +53,7 @@ router.get("/distinct/:postId", async (req, res) => {
   }
 
   let query = await db.query(
-    "Select * from post natural join registered where postid = $1",
+    "Select * from post join registered on creatoruserid = userid where postid = $1",
     [postId]
   );
 
@@ -70,7 +70,6 @@ router.get("/distinct/:postId", async (req, res) => {
   body.postTitle = post.posttitle;
   body.postDescription = post.postdescription;
   body.dateOfCreation = post.timeofcreation;
-  body.postType = post.typeofpost;
   body.postCreator = post.username;
 
   const categoryId = post.categoryid;
