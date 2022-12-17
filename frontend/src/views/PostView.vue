@@ -24,6 +24,7 @@ fetch(`http://localhost:3001/post/distinct/${route.params.postId}`)
   .then((res) => {
     replies.value = res.replies;
     post.value = res;
+    console.log(res);
     if (post.value.username === username) {
       isPostOwner.value = true;
     }
@@ -82,6 +83,12 @@ const updatePost = (query) => {
     },
   });
 };
+
+const acceptReply = (reply) => {
+  fetch("http://localhost:3001/reply/accept/");
+};
+
+const declineReply = (reply) => {};
 </script>
 
 <template>
@@ -178,6 +185,7 @@ const updatePost = (query) => {
               type="button"
               class="btn btn-labeled btn-success mx-1"
               v-if="isPostOwner"
+              @click="acceptReply(oneReply)"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -199,6 +207,7 @@ const updatePost = (query) => {
               type="button"
               class="btn btn-labeled btn-danger mx-1"
               v-if="isPostOwner"
+              @click="declineReply(oneReply)"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
