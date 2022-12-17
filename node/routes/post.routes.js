@@ -95,7 +95,7 @@ router.get("/distinct/:postId", async (req, res) => {
   body.created = query.rows[0].created;
 
   query = await db.query(
-    "select replytext, replycreated, username from replies join registered on replies.replycreatorid = registered.userid where postid = $1",
+    "select replyid, replytext, replycreated, username from replies join registered on replies.replycreatorid = registered.userid where postid = $1",
     [postId]
   );
 
