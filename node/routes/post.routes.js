@@ -53,7 +53,7 @@ router.get("/distinct/:postId", async (req, res) => {
   }
 
   let query = await db.query(
-    "Select * from post join registered on creatoruserid = userid where postid = $1",
+    "select * from post natural join category natural join course natural join study_programme where postid=$1",
     [postId]
   );
 
@@ -66,22 +66,33 @@ router.get("/distinct/:postId", async (req, res) => {
 
   let body = Object();
   const post = query.rows[0];
-  body.username = post.username;
-  body.postTitle = post.posttitle;
-  body.postDescription = post.postdescription;
-  body.dateOfCreation = post.timeofcreation;
-  body.postCreator = post.username;
+  body.postid=post.postid
+  body.categoryid = post.categoryid;
+  body.programmeid = post.programmeid;
+  body.courseid = post.courseid;
+  body.posttitle = post.posttitle;
+  body.postdescription = post.postdescription;
+  body.dateofcreation = post.timeofcreation;
+  body.postcreatorid = post.creatoruserid;
+  body.categoryname = post.categoryname;
+  body.coursename = post.coursename;
+  body.abbreviatoncourse=post.abbreviatoncourse
+  body.programename=post.programename
+  
 
-  const categoryId = post.categoryid;
+  const userId = post.creatoruserid;
 
   query = await db.query(
-    "select programename, abbreviationcourse, categoryname from category natural join course natural join study_programme where categoryid = $1",
-    [categoryId]
+    "select * from registered where userid = $1",
+    [userId]
   );
 
-  body.programme = query.rows[0].programename;
-  body.course = query.rows[0].kraticacourse;
-  body.category = query.rows[0].categoryname;
+  body.firstname = query.rows[0].firstname;
+  body.lastname = query.rows[0].lastname;
+  body.username = query.rows[0].username;
+  body.useravatar = query.rows[0].useravatar;
+  body.email = query.rows[0].email;
+  body.created = query.rows[0].created;
 
   query = await db.query(
     "select replytext, replycreated, username from replies join registered on replies.replycreatorid = registered.userid where postid = $1",
