@@ -13,27 +13,43 @@ if (!jwt) {
 const postId = ref(null);
 const title = ref("");
 const description = ref("");
-const type = ref("");
 const category = ref("Kategorija");
 const smjer = ref("Smjer");
 const course = ref("Predmet");
+let predmeti = ref([]);
+let kategorije = ref([]);
 
 if (route.params.postId) postId.value = route.params.postId;
 
+fetch("http://localhost:3001/info")
+  .then((response) => response.json())
+  .then((fetchedObject) => {
+    predmeti.value = fetchedObject.courses;
+    kategorije.value = fetchedObject.categories;
+  });
+
 const sendPost = () => {
-  fetch("http://localhost:3001/post", {
-    method: "PUT",
+  console.log({
+    id: postId.value,
+    title: title.value,
+    description: description.value,
+    category: category.value,
+    smjer: smjer.value,
+    course: course.value,
+  });
+  fetch("http://localhost:3001/update", {
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: jwt,
     },
     body: JSON.stringify({
-      postId: postId,
-      title: title,
-      description: description,
-      type: type,
-      category: category,
-      smjer: smjer,
-      course: course,
+      id: postId.value,
+      title: title.value,
+      description: description.value,
+      category: category.value,
+      smjer: smjer.value,
+      course: course.value,
     }),
   }).then((res) => {
     if (res.status === 201) {
@@ -87,8 +103,8 @@ const backToHomepage = () => {
           v-model="smjer"
         >
           <option selected>Smjer</option>
-          <option value="1">Računarstvo</option>
-          <option value="2">Elektrotehnika</option>
+          <option value="R">Računarstvo</option>
+          <option value="E">Elektrotehnika</option>
         </select>
       </div>
       <div class="col-12 col-md-4">
@@ -98,8 +114,9 @@ const backToHomepage = () => {
           v-model="course"
         >
           <option selected>Predmet</option>
-          <option value="1">Matan2</option>
-          <option value="2">Osnele</option>
+          <option v-for="predmet in predmeti">
+            {{ predmet.abbreviationcourse }}
+          </option>
         </select>
       </div>
       <div class="col-12 col-md-4">
@@ -109,20 +126,12 @@ const backToHomepage = () => {
           v-model="category"
         >
           <option selected>Kategorija</option>
-          <option value="1">MI</option>
-          <option value="2">ZI</option>
+          <option v-for="kategorija in kategorije">
+            {{ kategorija.categoryname }}
+          </option>
         </select>
       </div>
     </div>
-    <select
-      class="form-select w-75 mx-auto my-3"
-      aria-label="Default select example"
-      v-model="type"
-    >
-      <option selected>Odabir vrste oglasa</option>
-      <option value="1">Nudim</option>
-      <option value="2">Tražim</option>
-    </select>
     <div class="mb-3 w-75 mx-auto text-center h-50 mt-3 mb-0">
       <label for="title" class="form-label">Sadržaj</label>
       <textarea

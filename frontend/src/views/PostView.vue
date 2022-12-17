@@ -8,6 +8,7 @@ const reply = ref("");
 const showOpts = ref(false);
 const replies = ref([]);
 const username = cookies.get("username");
+const jwt = cookies.get("token");
 const router = useRouter();
 const route = useRoute();
 const post = ref({
@@ -21,6 +22,8 @@ const post = ref({
 fetch(`http://localhost:3001/post/distinct/${route.params.postId}`)
   .then((res) => res.json())
   .then((res) => {
+    replies.value = res.replies;
+    console.log(res);
     post.value = res;
     console.log(post.value.username, username);
     if (post.value.username === username) {
@@ -28,26 +31,24 @@ fetch(`http://localhost:3001/post/distinct/${route.params.postId}`)
     }
   });
 
-fetch(`http://localhost:3001/post/comments/${route.params.postId}`)
-  .then((res) => res.json())
-  .then((res) => {
-    replies.value = res;
-  });
-
 const postReply = () => {
   fetch("http://localhost:3001/reply", {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
+      Authorization: jwt,
     },
     body: JSON.stringify({
-      replyText: reply,
-      replyCreatorId: 2,
-      postId: route.params.postId,
+      replytext: reply.value,
+      postid: route.params.postId,
     }),
+  }).then((res) => {
+    if (res.status === 201) {
+      router.go();
+      return;
+    }
+    alert("Couldn't create post");
   });
-
-  router.go();
 };
 </script>
 
@@ -58,14 +59,11 @@ const postReply = () => {
         <h1 class="w-75">{{ post.postTitle }}</h1>
         <div class="w-25">
           <div class="d-flex justify-content-end align-items-center">
-            <a
-              href="username.com"
-              class="text-decoration-none ms-2"
-              style="font-size: 16px"
-            >
-            </a>
             <span class="ms-2 align-middle" style="font-size: 14px">
               {{ post.dateOfCreation }}
+            </span>
+            <span class="ms-2 align-middle" style="font-size: 14px">
+              {{ post.username }}
             </span>
             <span class="ms-2 align-middle" style="font-size: 14px">
               {{ post.postType }}
@@ -123,9 +121,8 @@ const postReply = () => {
         </div>
         <hr class="w-75 mx-auto mt-2 mt-md-0" />
         <div class="d-flex justify-content-start pb-1">
-          <div class="mx-2">Ovo nista</div>
-          <div class="mx-2">Nula bodova</div>
-          <div class="mx-2">nula</div>
+          <div class="mx-2">veliki problem</div>
+          <div class="mx-2">ne znam koji je predmet i to</div>
         </div>
       </div>
     </div>
