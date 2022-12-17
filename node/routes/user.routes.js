@@ -1,50 +1,54 @@
-const express = require('express')
-const router = express.Router()
-const path = require('path')
-const db = require('../db')
+const express = require("express");
+const router = express.Router();
+const path = require("path");
+const db = require("../db");
 
-router.get('/id/:id', async (req,res) => {
-    const id = req.params.id
-    let qString = 'select username, firstname, lastname, email, created from registered where userid = $1'
-    const query = await db.query(qString, [id])
-    
-    if (query.rowCount == 0) {
-        res.status(404).json({error: "no user with such id"})
-    }
-    res.status(200).json(query.rows[0])
-})
+router.get("/id/:id", async (req, res) => {
+  const id = req.params.id;
+  let qString =
+    "select username, firstname, lastname, email, created from registered where userid = $1";
+  const query = await db.query(qString, [id]);
 
-router.get('/:username', async (req, res) => {
-    const username = req.params.username
-    
-    let qString = 'select username, firstname, lastname, email, created from registered where username = $1'
-    const query = await db.query(qString, [username])
-    
-    if (query.rowCount == 0) {
-        res.status(404).json({error: "no user with such username"})
-    }
+  if (query.rowCount == 0) {
+    res.status(404).json({ error: "no user with such id" });
+  }
+  res.status(200).json(query.rows[0]);
+});
 
-    res.status(200).json(query.rows[0])
-    return
-})
+router.get("/:username", async (req, res) => {
+  const username = req.params.username;
 
-router.get('/replies/:id', async (req,res) => {
-    const id = req.params.id
+  let qString =
+    "select username, firstname, lastname, email, created from registered where username = $1";
+  const query = await db.query(qString, [username]);
 
-    let qString = 'select replyid, replytext, postid from replies where \
-    replycreatorid = $1 and statusvalue = \'aktivan\';'
-    let query = await db.query(qString,[id])
+  if (query.rowCount == 0) {
+    res.status(404).json({ error: "no user with such username" });
+  }
 
-    res.status(200).json(query.rows)
-    return
-}) 
+  res.status(200).json(query.rows[0]);
+  return;
+});
 
-router.get('/replies/recieved/:id', async (req,res) => {
-    const id = req.params.id
-    let qString = 'select replyid, replytext, postid from replies natural join post where creatoruserid = $1'
-    let query = await db.query(qString, [id])
+router.get("/replies/:id", async (req, res) => {
+  const id = req.params.id;
 
-    res.status(200).json(query.rows)
-})
+  let qString =
+    "select replyid, replytext, postid from replies where \
+    replycreatorid = $1 and statusvalue = 'aktivan';";
+  let query = await db.query(qString, [id]);
 
-module.exports = router
+  res.status(200).json(query.rows);
+  return;
+});
+
+router.get("/replies/recieved/:id", async (req, res) => {
+  const id = req.params.id;
+  let qString =
+    "select replyid, replytext, postid from replies natural join post where creatoruserid = $1";
+  let query = await db.query(qString, [id]);
+
+  res.status(200).json(query.rows);
+});
+
+module.exports = router;

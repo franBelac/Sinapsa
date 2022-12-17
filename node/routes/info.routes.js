@@ -4,7 +4,8 @@ const path = require("path");
 const db = require("../db");
 
 router.get("/", async (req, res) => {
-  let bigQuerry = "select * from course natural join category";
+  let bigQuerry =
+    "select * from course natural join category where courseid = 1";
   let qString1 = "select * from course";
   let qString2 = "select * from category where courseid = $1";
 
@@ -12,7 +13,9 @@ router.get("/", async (req, res) => {
   const query1 = await db.query(qString1, []);
   const bq = await db.query(bigQuerry, []);
   let body = {};
-  body.lista = [];
+  body.courses = query1.rows.map((x) => x.abbreviationcourse);
+  body.categories = bq.rows.map((x) => x.categoryname);
+  /*
   query1.rows.forEach(async (row) => {
     let rv = {};
     let cid = row.courseid;
@@ -24,7 +27,7 @@ router.get("/", async (req, res) => {
     body.lista.push(rv);
     console.log("rv je ", rv);
   });
-
+  */
   console.log("body jw ovo :", body);
   res.json(body);
   res.status(200);

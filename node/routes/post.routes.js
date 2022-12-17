@@ -5,11 +5,11 @@ const path = require("path");
 const db = require("../db");
 
 const postWCatQuerry =
-  'select \
+  "select \
     postid, posttitle, postdescription, username, timeofcreation, categoryname, abbreviationcourse, programename \
     from post join registered on post.creatoruserid = registered.userid \
     natural join category natural join course\
-    join study_programme on course.programmeid = study_programme.programmeid';
+    join study_programme on course.programmeid = study_programme.programmeid";
 
 router.put("/", async (req, res) => {
   const title = req.body.title;

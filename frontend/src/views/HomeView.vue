@@ -9,11 +9,5 @@ import PostList from "../components/PostList.vue";
       <PostList />
       <Leaderboard />
     </div>
-
-    <footer class="bg-dark text-white text-lg-start fixed-bottom">
-      <div class="text-center">
-        <h5 class="text-uppercase">Turbulent Tech</h5>
-      </div>
-    </footer>
   </body>
 </template>

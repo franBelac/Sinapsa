@@ -16,10 +16,8 @@ fetch("http://localhost:3001/post/all")
 fetch("http://localhost:3001/info")
   .then((response) => response.json())
   .then((fetchedObject) => {
-    const lista = fetchedObject.lista;
-
-    predmeti.value = lista;
-    kategorije.value = lista[0].categories;
+    predmeti.value = fetchedObject.courses;
+    kategorije.value = fetchedObject.categories;
   });
 
 const currentSmjer = ref("SMJER");
@@ -31,14 +29,13 @@ const currentKategorija = ref("KATEGORIJA");
 const smjerovi = ["R", "E"];
 
 const setFilter = (filterType, newValue) => {
+  console.log(newValue);
   if (filterType === "smjer") {
     currentSmjer.value = newValue;
   } else if (filterType === "predmet") {
-    currentPredmet.value = newValue.abbreviationcourse;
+    currentPredmet.value = newValue;
   } else if (filterType === "kategorija") {
-    currentKategorija.value = newValue.categoryname;
-  } else if (filterType === "tip") {
-    currentTip.value = newValue;
+    currentKategorija.value = newValue;
   }
 };
 
@@ -129,7 +126,7 @@ function pushWithQuery(query) {
           v-for="predmet in predmeti"
           @click="setFilter('predmet', predmet)"
         >
-          {{ predmet.course }}
+          {{ predmet }}
         </li>
       </ul>
     </div>

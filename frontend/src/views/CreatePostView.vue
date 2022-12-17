@@ -32,17 +32,15 @@ if (route.params.postId) {
 fetch("http://localhost:3001/info")
   .then((response) => response.json())
   .then((fetchedObject) => {
-    const lista = fetchedObject.lista;
-    predmeti.value = lista;
-    kategorije.value = lista[0].categories;
+    predmeti.value = fetchedObject.courses;
+    kategorije.value = fetchedObject.categories;
   });
 
-const sendPost = () => {
+const sendPost = async () => {
   if (title.value === "" || description.value === "") {
     alert("Molimo Vas da popunite sva polja!");
     return;
   }
-  console.log(postId.value, category.value, smjer.value, course.value);
   if (
     postId.value === null &&
     (category.value === "Kategorija" ||
@@ -52,8 +50,8 @@ const sendPost = () => {
     alert("Molimo Vas da popunite sva polja!");
     return;
   }
-
-  fetch("http://localhost:3001/update", {
+  router.go(-1);
+  await fetch("http://localhost:3001/update", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -69,6 +67,7 @@ const sendPost = () => {
     }),
   }).then((res) => {
     if (res.status === 201) {
+      console.log("Post created");
       router.push("/");
       return;
     }
@@ -134,7 +133,7 @@ const backToHomepage = () => {
           v-model="course"
         >
           <option v-for="predmet in predmeti">
-            {{ predmet.course }}
+            {{ predmet }}
           </option>
         </select>
       </div>
