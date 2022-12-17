@@ -4,15 +4,14 @@ import { useRouter, useRoute } from "vue-router";
 const router = useRouter();
 const route = useRoute();
 const posts = ref([]);
+const predmeti = ref([]);
+const kategorije = ref([]);
+
 fetch("http://localhost:3001/post/all")
   .then((response) => response.json())
   .then((fetchedObject) => {
     posts.value = fetchedObject.posts;
   });
-
-let predmeti = ref([]);
-
-let kategorije = ref([]);
 
 fetch("http://localhost:3001/info")
   .then((response) => response.json())
@@ -24,8 +23,6 @@ fetch("http://localhost:3001/info")
 const currentSmjer = ref("SMJER");
 
 const currentPredmet = ref("PREDMET");
-
-const currentTip = ref("TIP");
 
 const currentKategorija = ref("KATEGORIJA");
 
@@ -55,16 +52,11 @@ const filter = () => {
   if (currentKategorija.value == "KATEGORIJA") {
     currentKategorija.value = null;
   }
-  if (currentTip.value == "TIP") {
-    currentTip.value = null;
-  }
   const filterObject = {
     programename: currentSmjer.value,
     abbreviationcourse: currentPredmet.value,
     categoryname: currentKategorija.value,
-    typeofpost: currentTip.value,
   };
-
   fetch("http://localhost:3001/filter", {
     method: "POST",
     headers: {
@@ -81,7 +73,6 @@ const filter = () => {
   currentSmjer.value = "SMJER";
   currentPredmet.value = "PREDMET";
   currentKategorija.value = "KATEGORIJA";
-  currentTip.value = "TIP";
 };
 
 function pushWithQuery(query) {
@@ -166,26 +157,6 @@ function pushWithQuery(query) {
     <div class="btn-group m-1">
       <button
         type="button"
-        class="btn btn-dark dropdown-toggle"
-        data-bs-toggle="dropdown"
-        aria-expanded="false"
-      >
-        {{ currentTip }}
-      </button>
-      <ul class="dropdown-menu">
-        <li
-          class="dropdown-item"
-          v-for="tip in tipovi"
-          @click="setFilter('tip', tip)"
-        >
-          {{ tip }}
-        </li>
-      </ul>
-    </div>
-
-    <div class="btn-group m-1">
-      <button
-        type="button"
         class="btn btn-primary"
         @click="filter"
         aria-expanded="false"
@@ -225,7 +196,7 @@ function pushWithQuery(query) {
       <div class="d-flex justify-content-start pb-1">
         <div class="mx-2">{{ post.programename }}</div>
         <div class="mx-2">{{ post.abbreviationcourse }}</div>
-        <div class="mx-2">{{ posts.categoryname }}</div>
+        <div class="mx-2">{{ post.categoryname }}</div>
       </div>
     </div>
   </div>

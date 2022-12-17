@@ -3,31 +3,29 @@ import { useRouter, useRoute } from "vue-router";
 import { ref } from "vue";
 import { useCookies } from "vue3-cookies";
 const { cookies } = useCookies();
-
+const isAdmin = ref(false);
 const reply = ref("");
-const showOpts = ref(false);
+const isPostOwner = ref(false);
 const replies = ref([]);
 const username = cookies.get("username");
 const jwt = cookies.get("token");
 const router = useRouter();
 const route = useRoute();
 const post = ref({
-  postTitle: "posttitle",
-  username: "username",
-  dateOfCreation: "timeofcreation",
-  postType: "posttype",
-  postDescription: "postdescription",
+  postTitle: "",
+  username: "",
+  dateOfCreation: "",
+  postType: "",
+  postDescription: "",
 });
 
 fetch(`http://localhost:3001/post/distinct/${route.params.postId}`)
   .then((res) => res.json())
   .then((res) => {
     replies.value = res.replies;
-    console.log(res);
     post.value = res;
-    console.log(post.value.username, username);
     if (post.value.username === username) {
-      showOpts = true;
+      isPostOwner.value = true;
     }
   });
 
@@ -48,6 +46,40 @@ const postReply = () => {
       return;
     }
     alert("Couldn't create post");
+  });
+};
+
+const deletePost = () => {
+  if (!confirm("Are you sure you want to delete this post?")) {
+    return;
+  }
+  fetch(`http://localhost:3001/delete`, {
+    method: "DELETE",
+    headers: {
+      Authorization: jwt,
+      body: JSON.stringify({
+        postid: route.params.postId,
+      }),
+    },
+  }).then((res) => {
+    if (res.status === 200) {
+      router.push("/");
+      return;
+    }
+    alert("Couldn't delete post");
+  });
+};
+
+const updatePost = (query) => {
+  router.push({
+    name: "create",
+    query: {
+      ...route.query,
+      ...query,
+    },
+    params: {
+      postId: query,
+    },
   });
 };
 </script>
@@ -79,9 +111,10 @@ const postReply = () => {
           class="col-12 col-sm-3 d-flex align-items-center justify-content-end"
         >
           <button
+            @click="updatePost(route.params.postId)"
             type="button"
             class="btn btn-labeled btn-success mx-1"
-            v-if="showOpts"
+            v-if="isPostOwner"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -99,7 +132,8 @@ const postReply = () => {
           <button
             type="button"
             class="btn btn-labeled btn-danger mx-1"
-            v-if="showOpts"
+            v-if="isPostOwner"
+            @click="deletePost"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -140,7 +174,11 @@ const postReply = () => {
             </span>
           </div>
           <div class="h-75 d-flex align-items-center justify-content-end">
-            <button type="button" class="btn btn-labeled btn-success mx-1">
+            <button
+              type="button"
+              class="btn btn-labeled btn-success mx-1"
+              v-if="isPostOwner"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -157,7 +195,11 @@ const postReply = () => {
                 />
               </svg>
             </button>
-            <button type="button" class="btn btn-labeled btn-danger mx-1">
+            <button
+              type="button"
+              class="btn btn-labeled btn-danger mx-1"
+              v-if="isPostOwner"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -174,7 +216,11 @@ const postReply = () => {
                 />
               </svg>
             </button>
-            <button type="button" class="btn btn-labeled btn-danger mx-1">
+            <button
+              type="button"
+              class="btn btn-labeled btn-danger mx-1"
+              v-if="isAdmin"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -198,6 +244,7 @@ const postReply = () => {
     </div>
 
     <div
+      v-if="!isPostOwner"
       class="text-center text-lg-start text-muted w-100 p-3 mb-3 zindex-fixed"
       style="height: 200px"
     >
