@@ -4,6 +4,8 @@ const path = require("path");
 const db = require("../db");
 const jwt = require("jsonwebtoken");
 
+const idsQuery =
+  "select categoryid from category natural join course where abbreviationcourse = $1 and categoryname = $2";
 const userQuery =
   "insert into Post (postTitle, postDescription, timeOfCreation, creatorUserID, categoryID) VALUES ( $1, $2, CURRENT_TIMESTAMP, $3, $4);";
 const userQueryUpdate =
@@ -13,11 +15,13 @@ router.post("/", async (req, res) => {
   const id = req.body.id;
   const title = req.body.title;
   const desc = req.body.description;
+
+  const course = req.body.course;
   const category = req.body.category;
   const secretKey = "tajnikljuc";
 
   const token = req.headers["authorization"];
-  jwt.verify(token, secretKey, (err, decoded) => {
+  await jwt.verify(token, secretKey, async (err, decoded) => {
     if (err) {
       res.status(401);
       res.json({});
@@ -29,9 +33,10 @@ router.post("/", async (req, res) => {
 
       if (id && desc && title) {
         db.query(userQueryUpdate, [desc, title, id]);
-      } else if (title && desc && category) {
+      } else if (title && desc && category && course) {
         console.log(title, desc, user, category);
-        db.query(userQuery, [title, desc, user, category]);
+        let catid = await db.query(idsQuery, [course, category]);
+        db.query(userQuery, [title, desc, user, catid.rows[0].categoryid]);
       } else {
         res.status(400);
         res.json({ status: "fail" });
@@ -42,4 +47,5 @@ router.post("/", async (req, res) => {
   res.json({ status: "success" });
   return;
 });
+
 module.exports = router;
