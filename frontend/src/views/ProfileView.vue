@@ -31,6 +31,7 @@ fetch(`http://localhost:3001/user/${realUsername}`)
 fetch(`http://localhost:3001/post/user/${realUsername}`)
   .then((res) => res.json())
   .then((res) => {
+    console.log(res);
     posts.value = res.posts;
   });
 

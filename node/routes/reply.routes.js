@@ -1,92 +1,102 @@
-const express = require('express')
-const router = express.Router()
-const path = require('path')
-const db = require('../db')
+const express = require("express");
+const router = express.Router();
+const path = require("path");
+const db = require("../db");
+const jwt = require("jsonwebtoken");
+const secretKey = "tajnikljuc";
 
 async function updateReplyStatus(value, replyid) {
-    let qString = 'update replies set statusvalue = $1 where replyid = $2'
-    let query = await db.query(qString,[value, replyid])
+  let qString = "update replies set statusvalue = $1 where replyid = $2";
+  let query = await db.query(qString, [value, replyid]);
 
-    if (query.rowCount) {
-        return true
-    } else {
-        return false
-    }
+  if (query.rowCount) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
+router.put("/", async (req, res) => {
+  console.log(req.body);
+  const replyText = req.body.replytext;
+  const postId = req.body.postid;
+  const token = req.headers["authorization"];
 
-router.put('/', async (req,res) =>{
-    console.log(req.body)
-    const replyText = req.body.replytext
-    const replyCreatorId = req.body.replycreatorid
-    const postId = req.body.postid
+  let qString =
+    "insert into replies values(default, $1, current_date, 'aktivan', $2, $3)";
 
-    let qString = "insert into replies values(default, $1, current_date, 'aktivan', $2, $3)"
-    let query = await db.query(qString, [replyText, replyCreatorId, postId])
-    console.log(query)
+  await jwt.verify(token, secretKey, async (err, decoded) => {
+    if (err) {
+      res.status(401);
+      res.json({});
+      return;
+    } else {
+      const payload = decoded;
+      console.log(payload);
+      const user = payload.id;
 
-    if (query.rowCount) {
-        res.status(200).end()
-        return
+      if (user && replyText && postId) {
+        let query = await db.query(qString, [replyText, user, postId]);
+        res.status(201).end();
+        return;
+      } else {
+        res.status(400).end();
+        return;
+      }
     }
-    
-    res.status(500).end()
+  });
 
-})
+  res.status(500).end();
+});
 
-router.post('/accept/:replyid', async (req,res) => {
-    const replyid = req.params.replyid
+router.post("/accept/:replyid", async (req, res) => {
+  const replyid = req.params.replyid;
 
-    const status = await updateReplyStatus('accepted', replyid)
-    if (status) {
-        res.status(200).end()
-        return
-    }
-    res.status(404).end()
-})
+  const status = await updateReplyStatus("accepted", replyid);
+  if (status) {
+    res.status(200).end();
+    return;
+  }
+  res.status(404).end();
+});
 
+router.post("/decline/:replyid", async (req, res) => {
+  const replyid = req.params.replyid;
 
-router.post('/decline/:replyid', async (req,res) => {
-    const replyid = req.params.replyid
+  const status = await updateReplyStatus("declined", replyid);
+  if (status) {
+    res.status(200).end();
+    return;
+  }
+  res.status(404).end();
+});
 
-    const status = await updateReplyStatus('declined', replyid)
-    if (status) {
-        res.status(200).end()
-        return
-    }
-    res.status(404).end()
-})
+router.get("/get/:replyid", async (req, res) => {
+  const replyid = req.params.replyid;
+  const getQuerry = "select * from replies where replyid = $1";
+  let reply = await db.query(getQuerry, [replyid]);
+  if (reply) {
+    rv = reply.rows[0];
+    res.json({ reply: rv });
+    res.status(200);
+    return;
+  }
+  res.status(404);
+  return;
+});
 
+router.get("/getall/:postid", async (req, res) => {
+  const postid = req.params.postid;
+  const getQuerry = "select * from replies where postid = $1";
+  let reply = await db.query(getQuerry, [postid]);
+  if (reply) {
+    rv = reply.rows;
+    res.json({ replies: rv });
+    res.status(200);
+    return;
+  }
+  res.status(404);
+  return;
+});
 
-
-router.get('/get/:replyid', async (req,res) => {
-    const replyid = req.params.replyid
-    const getQuerry = "select * from replies where replyid = $1"
-    let reply = await db.query(getQuerry, [replyid])
-    if(reply) {
-        rv = reply.rows[0]
-        res.json({reply: rv})
-        res.status(200)
-        return
-    }
-    res.status(404)
-    return    
-})
-
-router.get('/getall/:postid', async (req,res) => {
-    const postid = req.params.postid
-    const getQuerry = "select * from replies where postid = $1"
-    let reply = await db.query(getQuerry, [postid])
-    if(reply) {
-        rv = reply.rows
-        res.json({replies: rv})
-        res.status(200)
-        return
-    }
-    res.status(404)
-    return  
-    
-})
-
-module.exports = router
-
+module.exports = router;
