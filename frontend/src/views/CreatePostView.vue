@@ -13,27 +13,59 @@ if (!jwt) {
 const postId = ref(null);
 const title = ref("");
 const description = ref("");
-const type = ref("");
 const category = ref("Kategorija");
 const smjer = ref("Smjer");
 const course = ref("Predmet");
+const predmeti = ref([]);
+const kategorije = ref([]);
 
-if (route.params.postId) postId.value = route.params.postId;
+if (route.params.postId) {
+  postId.value = route.params.postId;
+  fetch(`http://localhost:3001/post/distinct/${route.params.postId}`)
+    .then((res) => res.json())
+    .then((res) => {
+      description.value = res.postDescription;
+      title.value = res.postTitle;
+    });
+}
+
+fetch("http://localhost:3001/info")
+  .then((response) => response.json())
+  .then((fetchedObject) => {
+    const lista = fetchedObject.lista;
+    predmeti.value = lista;
+    kategorije.value = lista[0].categories;
+  });
 
 const sendPost = () => {
-  fetch("http://localhost:3001/post", {
-    method: "PUT",
+  if (title.value === "" || description.value === "") {
+    alert("Molimo Vas da popunite sva polja!");
+    return;
+  }
+  console.log(postId.value, category.value, smjer.value, course.value);
+  if (
+    postId.value === null &&
+    (category.value === "Kategorija" ||
+      smjer.value === "Smjer" ||
+      course.value === "Predmet")
+  ) {
+    alert("Molimo Vas da popunite sva polja!");
+    return;
+  }
+
+  fetch("http://localhost:3001/update", {
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: jwt,
     },
     body: JSON.stringify({
-      postId: postId,
-      title: title,
-      description: description,
-      type: type,
-      category: category,
-      smjer: smjer,
-      course: course,
+      id: postId.value,
+      title: title.value,
+      description: description.value,
+      category: category.value,
+      smjer: smjer.value,
+      course: course.value,
     }),
   }).then((res) => {
     if (res.status === 201) {
@@ -71,6 +103,7 @@ const backToHomepage = () => {
     <div class="mb-3 w-75 mx-auto text-center my-3">
       <label for="title" class="form-label">Naslov</label>
       <input
+        required
         type="text"
         class="form-control"
         id="title"
@@ -79,53 +112,50 @@ const backToHomepage = () => {
       />
       <div id="emailHelp" class="form-text">Naslov Vašeg oglasa</div>
     </div>
-    <div class="row w-75 mx-auto justify-content-around">
+    <div class="row w-75 mx-auto justify-content-around" v-if="!postId">
       <div class="col-12 col-md-4">
+        <label for="title" class="form-label">Smjer</label>
         <select
+          required
           class="form-select w-100 mx-auto my-1 my-md-3"
           aria-label="Default select example"
           v-model="smjer"
         >
-          <option selected>Smjer</option>
-          <option value="1">Računarstvo</option>
-          <option value="2">Elektrotehnika</option>
+          <option value="R">Računarstvo</option>
+          <option value="E">Elektrotehnika</option>
         </select>
       </div>
       <div class="col-12 col-md-4">
+        <label for="title" class="form-label">Predmet</label>
         <select
+          required
           class="form-select w-100 mx-auto my-1 my-md-3"
           aria-label="Default select example"
           v-model="course"
         >
-          <option selected>Predmet</option>
-          <option value="1">Matan2</option>
-          <option value="2">Osnele</option>
+          <option v-for="predmet in predmeti">
+            {{ predmet.course }}
+          </option>
         </select>
       </div>
       <div class="col-12 col-md-4">
+        <label for="title" class="form-label">Kategorija</label>
         <select
+          required
           class="form-select w-100 mx-auto my-1 my-md-3"
           aria-label="Default select example"
           v-model="category"
         >
-          <option selected>Kategorija</option>
-          <option value="1">MI</option>
-          <option value="2">ZI</option>
+          <option v-for="kategorija in kategorije">
+            {{ kategorija }}
+          </option>
         </select>
       </div>
     </div>
-    <select
-      class="form-select w-75 mx-auto my-3"
-      aria-label="Default select example"
-      v-model="type"
-    >
-      <option selected>Odabir vrste oglasa</option>
-      <option value="1">Nudim</option>
-      <option value="2">Tražim</option>
-    </select>
     <div class="mb-3 w-75 mx-auto text-center h-50 mt-3 mb-0">
       <label for="title" class="form-label">Sadržaj</label>
       <textarea
+        required
         class="form-control"
         style="height: 150px"
         id="body"

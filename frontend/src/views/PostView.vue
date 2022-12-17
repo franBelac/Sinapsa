@@ -3,35 +3,30 @@ import { useRouter, useRoute } from "vue-router";
 import { ref } from "vue";
 import { useCookies } from "vue3-cookies";
 const { cookies } = useCookies();
-
+const isAdmin = ref(false);
 const reply = ref("");
-const showOpts = ref(false);
+const isPostOwner = ref(false);
 const replies = ref([]);
 const username = cookies.get("username");
+const jwt = cookies.get("token");
 const router = useRouter();
 const route = useRoute();
 const post = ref({
-  postTitle: "posttitle",
-  username: "username",
-  dateOfCreation: "timeofcreation",
-  postType: "posttype",
-  postDescription: "postdescription",
+  postTitle: "",
+  username: "",
+  dateOfCreation: "",
+  postType: "",
+  postDescription: "",
 });
 
 fetch(`http://localhost:3001/post/distinct/${route.params.postId}`)
   .then((res) => res.json())
   .then((res) => {
+    replies.value = res.replies;
     post.value = res;
-    console.log(post.value.username, username);
     if (post.value.username === username) {
-      showOpts = true;
+      isPostOwner.value = true;
     }
-  });
-
-fetch(`http://localhost:3001/post/comments/${route.params.postId}`)
-  .then((res) => res.json())
-  .then((res) => {
-    replies.value = res;
   });
 
 const postReply = () => {
@@ -39,15 +34,53 @@ const postReply = () => {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
+      Authorization: jwt,
     },
     body: JSON.stringify({
-      replyText: reply,
-      replyCreatorId: 2,
-      postId: route.params.postId,
+      replytext: reply.value,
+      postid: route.params.postId,
     }),
+  }).then((res) => {
+    if (res.status === 201) {
+      router.go();
+      return;
+    }
+    alert("Couldn't create post");
   });
+};
 
-  router.go();
+const deletePost = () => {
+  if (!confirm("Are you sure you want to delete this post?")) {
+    return;
+  }
+  fetch(`http://localhost:3001/delete`, {
+    method: "DELETE",
+    headers: {
+      Authorization: jwt,
+      body: JSON.stringify({
+        postid: route.params.postId,
+      }),
+    },
+  }).then((res) => {
+    if (res.status === 200) {
+      router.push("/");
+      return;
+    }
+    alert("Couldn't delete post");
+  });
+};
+
+const updatePost = (query) => {
+  router.push({
+    name: "create",
+    query: {
+      ...route.query,
+      ...query,
+    },
+    params: {
+      postId: query,
+    },
+  });
 };
 </script>
 
@@ -58,14 +91,11 @@ const postReply = () => {
         <h1 class="w-75">{{ post.postTitle }}</h1>
         <div class="w-25">
           <div class="d-flex justify-content-end align-items-center">
-            <a
-              href="username.com"
-              class="text-decoration-none ms-2"
-              style="font-size: 16px"
-            >
-            </a>
             <span class="ms-2 align-middle" style="font-size: 14px">
               {{ post.dateOfCreation }}
+            </span>
+            <span class="ms-2 align-middle" style="font-size: 14px">
+              {{ post.username }}
             </span>
             <span class="ms-2 align-middle" style="font-size: 14px">
               {{ post.postType }}
@@ -81,9 +111,10 @@ const postReply = () => {
           class="col-12 col-sm-3 d-flex align-items-center justify-content-end"
         >
           <button
+            @click="updatePost(route.params.postId)"
             type="button"
             class="btn btn-labeled btn-success mx-1"
-            v-if="showOpts"
+            v-if="isPostOwner"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -101,7 +132,8 @@ const postReply = () => {
           <button
             type="button"
             class="btn btn-labeled btn-danger mx-1"
-            v-if="showOpts"
+            v-if="isPostOwner"
+            @click="deletePost"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -123,9 +155,8 @@ const postReply = () => {
         </div>
         <hr class="w-75 mx-auto mt-2 mt-md-0" />
         <div class="d-flex justify-content-start pb-1">
-          <div class="mx-2">Ovo nista</div>
-          <div class="mx-2">Nula bodova</div>
-          <div class="mx-2">nula</div>
+          <div class="mx-2">{{ post.programme }}</div>
+          <div class="mx-2">{{ post.category }}</div>
         </div>
       </div>
     </div>
@@ -143,7 +174,11 @@ const postReply = () => {
             </span>
           </div>
           <div class="h-75 d-flex align-items-center justify-content-end">
-            <button type="button" class="btn btn-labeled btn-success mx-1">
+            <button
+              type="button"
+              class="btn btn-labeled btn-success mx-1"
+              v-if="isPostOwner"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -160,7 +195,11 @@ const postReply = () => {
                 />
               </svg>
             </button>
-            <button type="button" class="btn btn-labeled btn-danger mx-1">
+            <button
+              type="button"
+              class="btn btn-labeled btn-danger mx-1"
+              v-if="isPostOwner"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -177,7 +216,11 @@ const postReply = () => {
                 />
               </svg>
             </button>
-            <button type="button" class="btn btn-labeled btn-danger mx-1">
+            <button
+              type="button"
+              class="btn btn-labeled btn-danger mx-1"
+              v-if="isAdmin"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -201,6 +244,7 @@ const postReply = () => {
     </div>
 
     <div
+      v-if="!isPostOwner"
       class="text-center text-lg-start text-muted w-100 p-3 mb-3 zindex-fixed"
       style="height: 200px"
     >
