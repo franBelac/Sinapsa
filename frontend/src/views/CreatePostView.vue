@@ -32,8 +32,9 @@ if (route.params.postId) {
 fetch("http://localhost:3001/info")
   .then((response) => response.json())
   .then((fetchedObject) => {
-    predmeti.value = fetchedObject.courses;
-    kategorije.value = fetchedObject.categories;
+    const lista = fetchedObject.lista;
+    predmeti.value = lista;
+    kategorije.value = lista[0].categories;
   });
 
 const sendPost = () => {
@@ -133,7 +134,7 @@ const backToHomepage = () => {
           v-model="course"
         >
           <option v-for="predmet in predmeti">
-            {{ predmet.abbreviationcourse }}
+            {{ predmet.course }}
           </option>
         </select>
       </div>
@@ -146,7 +147,7 @@ const backToHomepage = () => {
           v-model="category"
         >
           <option v-for="kategorija in kategorije">
-            {{ kategorija.categoryname }}
+            {{ kategorija }}
           </option>
         </select>
       </div>

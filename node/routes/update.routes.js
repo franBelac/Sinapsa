@@ -44,7 +44,7 @@ router.post("/", async (req, res) => {
       }
     }
   });
-  res.json({ status: "success" });
+  res.status(201).end;
   return;
 });
 

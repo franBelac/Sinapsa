@@ -155,8 +155,8 @@ const updatePost = (query) => {
         </div>
         <hr class="w-75 mx-auto mt-2 mt-md-0" />
         <div class="d-flex justify-content-start pb-1">
-          <div class="mx-2">veliki problem</div>
-          <div class="mx-2">ne znam koji je predmet i to</div>
+          <div class="mx-2">{{ post.programme }}</div>
+          <div class="mx-2">{{ post.category }}</div>
         </div>
       </div>
     </div>
