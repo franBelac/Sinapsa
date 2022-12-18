@@ -35,23 +35,25 @@ const handleLogout = () => {
       <div class="collapse navbar-collapse justify-content-end" id="nav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <RouterLink to="/" class="nav-link">Home</RouterLink>
+            <RouterLink to="/" class="nav-link">Naslovna</RouterLink>
           </li>
           <li class="nav-item" v-if="!token">
-            <RouterLink to="/login" class="nav-link">Login</RouterLink>
+            <RouterLink to="/login" class="nav-link">Prijava</RouterLink>
           </li>
           <li class="nav-item" v-if="!token">
-            <RouterLink to="/register" class="nav-link">Register</RouterLink>
+            <RouterLink to="/register" class="nav-link"
+              >Registracija</RouterLink
+            >
           </li>
           <li class="nav-item" v-if="token">
-            <RouterLink to="/profile" class="nav-link">My Profile</RouterLink>
+            <RouterLink to="/profile" class="nav-link">Moj Profil</RouterLink>
           </li>
           <li class="nav-item" v-if="token">
             <button
               @click="handleLogout"
               class="nav-link btn btn-outline-secondary"
             >
-              Logout
+              Odjava
             </button>
           </li>
         </ul>

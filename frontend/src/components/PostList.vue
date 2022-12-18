@@ -89,7 +89,7 @@ function pushWithQuery(query) {
 <template>
   <div class="m-1">
     <div class="btn-group">
-      <h5>FILTER BY:</h5>
+      <h5>FILTRIRAJ PO:</h5>
     </div>
     <div class="btn-group m-1">
       <button
@@ -182,7 +182,10 @@ function pushWithQuery(query) {
             </span>
           </div>
         </div>
-        <button class="btn btn-primary col-4 col-md-1 mx-1" @click="pushWithQuery(post.postid)">
+        <button
+          class="btn btn-primary col-4 col-md-1 mx-1"
+          @click="pushWithQuery(post.postid)"
+        >
           Otvori
         </button>
       </div>
