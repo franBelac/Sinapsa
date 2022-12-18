@@ -116,7 +116,7 @@ router.get("/distinct/:postId", async (req, res) => {
     [postId]
   );
 
-  replyTimestampToDate(query.rows)
+  replyTimestampToDate(query.rows) //ne lazem
 
   body.replies = query.rows;
 
