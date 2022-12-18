@@ -139,6 +139,8 @@ const sendRating = (reply) => {
     alert("Couldn't grade post");
   });
 };
+
+const getUrl = (avatar) => "http://localhost:3001/" + avatar;
 </script>
 
 <template>
@@ -151,10 +153,10 @@ const sendRating = (reply) => {
               class="rounded-circle shadow"
               style="height: 75px"
               alt="avatar2"
-              src="https://mdbcdn.b-cdn.net/img/new/avatars/1.webp"
+              :src="getUrl(post.useravatar)"
             />
           </div>
-          <h1 class="col-8 d-flex align-items-center">Title</h1>
+          <h1 class="col-8 d-flex align-items-center">{{ post.posttitle }}</h1>
         </div>
         <div class="col-12 col-md-4">
           <div class="d-flex justify-content-end align-items-center">
@@ -234,7 +236,15 @@ const sendRating = (reply) => {
         class="shadow w-100 bg-light p-2 row rounded my-4 mx-auto row"
         v-if="oneReply.statusvalue != 'declined'"
       >
-        <div class="p-3 col-12 col-sm-9" style="font-size: 18px">
+        <div class="col-3 col-md-1 p-3">
+          <img
+            class="rounded-circle shadow"
+            style="height: 75px"
+            alt="avatar2"
+            :src="getUrl(oneReply.useravatar)"
+          />
+        </div>
+        <div class="p-5 p-sm-3 col-9 col-sm-8" style="font-size: 18px">
           {{ oneReply.replytext }}
         </div>
         <div class="col-12 col-sm-3">
@@ -248,7 +258,13 @@ const sendRating = (reply) => {
             <button
               type="button"
               class="btn btn-labeled btn-success mx-1"
-              v-if="isPostOwner && !(oneReply.statusvalue == 'accepted')"
+              v-if="
+                isPostOwner &&
+                !(
+                  oneReply.statusvalue == 'accepted' ||
+                  oneReply.statusvalue == 'graded'
+                )
+              "
               @click="acceptReply(oneReply)"
             >
               <svg
@@ -270,7 +286,13 @@ const sendRating = (reply) => {
             <button
               type="button"
               class="btn btn-labeled btn-danger mx-1"
-              v-if="isPostOwner && !(oneReply.statusvalue == 'accepted')"
+              v-if="
+                isPostOwner &&
+                !(
+                  oneReply.statusvalue == 'accepted' ||
+                  oneReply.statusvalue == 'graded'
+                )
+              "
               @click="declineReply(oneReply)"
             >
               <svg
@@ -289,6 +311,12 @@ const sendRating = (reply) => {
                 />
               </svg>
             </button>
+            <div
+              class="d-flex justify-content-center align-items-center p-1 mt-1 bg-success rounded text-white font-italic font-weight-light"
+              v-if="oneReply.statusvalue == 'graded'"
+            >
+              Ocijenjeno
+            </div>
             <button
               type="button"
               class="btn btn-labeled btn-danger mx-1"
