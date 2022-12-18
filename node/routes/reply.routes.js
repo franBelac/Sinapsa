@@ -11,7 +11,7 @@ function timestampToDate(rows) {
       d = d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear()
       row.replycreated = d
     }
-  }
+}
 
 async function updateReplyStatus(value, replyid) {
   let qString = "update replies set statusvalue = $1 where replyid = $2";

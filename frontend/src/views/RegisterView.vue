@@ -18,6 +18,11 @@ const handleRegister = () => {
 
   var input = document.querySelector('input[type="file"]');
 
+  if (input.files[0].size > 2097152) {
+    alert("Image is too big!");
+    return;
+  }
+
   var data = new FormData();
   data.append("file", input.files[0]);
   data.append("name", name.value);
@@ -26,7 +31,6 @@ const handleRegister = () => {
   data.append("email", email.value);
   data.append("password", password.value);
 
-  console.log(image.value.files[0]);
   fetch("http://localhost:3001/register", {
     method: "POST",
     headers: {},

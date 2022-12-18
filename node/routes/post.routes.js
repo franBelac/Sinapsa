@@ -19,6 +19,14 @@ function timestampToDate(rows) {
   }
 }
 
+function replyTimestampToDate(rows) {
+  for (const row of rows) {
+    d = new Date(row.replycreated)
+    d = d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear()
+    row.replycreated = d
+  }
+}
+
 router.put("/", async (req, res) => {
   const title = req.body.title;
   const description = req.body.description;
@@ -107,6 +115,8 @@ router.get("/distinct/:postId", async (req, res) => {
     "select * from replies join registered on replies.replycreatorid = registered.userid where postid = $1",
     [postId]
   );
+
+  replyTimestampToDate(query.rows) //ne lazem
 
   body.replies = query.rows;
 
