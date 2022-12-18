@@ -234,7 +234,15 @@ const sendRating = (reply) => {
         class="shadow w-100 bg-light p-2 row rounded my-4 mx-auto row"
         v-if="oneReply.statusvalue != 'declined'"
       >
-        <div class="p-3 col-12 col-sm-9" style="font-size: 18px">
+        <div class="col-3 col-md-1 p-3">
+          <img
+            class="rounded-circle shadow"
+            style="height: 75px"
+            alt="avatar2"
+            src="https://mdbcdn.b-cdn.net/img/new/avatars/1.webp"
+          />
+        </div>
+        <div class="p-5 p-sm-3 col-9 col-sm-8" style="font-size: 18px">
           {{ oneReply.replytext }}
         </div>
         <div class="col-12 col-sm-3">

@@ -28,11 +28,11 @@ fetch(`http://localhost:3001/user/${realUsername}`)
   .then((res) => res.json())
   .then((res) => {
     user.value = res;
+    console.log(user.value);
     fetch(`http://localhost:3001/user/replies/${user.value.userid}`)
       .then((res) => res.json())
       .then((res) => {
         replies.value = res;
-        console.log(replies.value);
       });
   });
 
@@ -60,6 +60,8 @@ const newPost = () => {
     name: "create",
   });
 };
+
+const getUrl = (avatar) => "http://localhost:3001/" + avatar;
 </script>
 
 <template>
@@ -69,7 +71,7 @@ const newPost = () => {
         <img
           class="rounded-circle shadow mx-auto d-block"
           alt="avatar2"
-          src="https://mdbcdn.b-cdn.net/img/new/avatars/1.webp"
+          :src="getUrl(user.useravatar)"
         />
         <div class="mt-4 form-group text-center">
           <label>{{ user.username }}</label
