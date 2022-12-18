@@ -6,10 +6,18 @@ const db = require("../db");
 
 const postWCatQuerry =
   "select \
-    postid, posttitle, postdescription, username, timeofcreation, categoryname, abbreviationcourse, programename \
+    postid, posttitle, postdescription, username, date(timeofcreation) as timeofcreation, categoryname, abbreviationcourse, programename \
     from post join registered on post.creatoruserid = registered.userid \
     natural join category natural join course\
-    join study_programme on course.programmeid = study_programme.programmeid";
+    join study_programme on course.programmeid = study_programme.programmeid"
+
+function timestampToDate(rows) {
+  for (const row of rows) {
+    d = new Date(row.timeofcreation)
+    d = d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear()
+    row.timeofcreation = d
+  }
+}
 
 router.put("/", async (req, res) => {
   const title = req.body.title;
@@ -39,6 +47,8 @@ router.get("/all", async (req, res) => {
   let qString = postWCatQuerry;
   const query = await db.query(qString, []);
 
+  timestampToDate(query.rows)
+
   let body = Object();
   body.posts = query.rows;
   res.status(200).json(body);
@@ -65,6 +75,7 @@ router.get("/distinct/:postId", async (req, res) => {
   }
 
   let body = Object();
+  timestampToDate(query.rows)
   const post = query.rows[0];
   body.postid = post.postid;
   body.categoryid = post.categoryid;
@@ -124,6 +135,7 @@ router.get("/user/:username", async (req, res) => {
   let query = await db.query(qString, [username]);
 
   let body = Object();
+  timestampToDate(query.rows)
   body.posts = query.rows;
   res.status(200).json(body);
 });
