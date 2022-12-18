@@ -238,7 +238,13 @@ const sendRating = (reply) => {
             <button
               type="button"
               class="btn btn-labeled btn-success mx-1"
-              v-if="isPostOwner && !(oneReply.statusvalue == 'accepted')"
+              v-if="
+                isPostOwner &&
+                !(
+                  oneReply.statusvalue == 'accepted' ||
+                  oneReply.statusvalue == 'graded'
+                )
+              "
               @click="acceptReply(oneReply)"
             >
               <svg
@@ -260,7 +266,13 @@ const sendRating = (reply) => {
             <button
               type="button"
               class="btn btn-labeled btn-danger mx-1"
-              v-if="isPostOwner && !(oneReply.statusvalue == 'accepted')"
+              v-if="
+                isPostOwner &&
+                !(
+                  oneReply.statusvalue == 'accepted' ||
+                  oneReply.statusvalue == 'graded'
+                )
+              "
               @click="declineReply(oneReply)"
             >
               <svg
@@ -279,6 +291,12 @@ const sendRating = (reply) => {
                 />
               </svg>
             </button>
+            <div
+              class="d-flex justify-content-center align-items-center p-1 mt-1 bg-success rounded text-white font-italic font-weight-light"
+              v-if="oneReply.statusvalue == 'graded'"
+            >
+              Ocijenjeno
+            </div>
             <button
               type="button"
               class="btn btn-labeled btn-danger mx-1"
