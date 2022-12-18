@@ -118,6 +118,7 @@ const declineReply = (reply) => {
 };
 
 const sendRating = (reply) => {
+  console.log(reply);
   fetch(`http://localhost:3001/grade`, {
     method: "PUT",
     headers: {
@@ -128,13 +129,14 @@ const sendRating = (reply) => {
       grade: ocjena.value,
       instructorid: reply.replycreatorid,
       postid: route.params.postId,
+      replyid: reply.replyid,
     }),
   }).then((res) => {
     if (res.status === 201) {
       router.go();
       return;
     }
-    alert("Couldn't create post");
+    alert("Couldn't grade post");
   });
 };
 </script>
