@@ -46,8 +46,8 @@ router.post("/", async (req, res) => {
   const password = req.body.password;
 
   const myFile = req.files.file;
-  const fname = myFile.name.split(".")
-  const newName = username.concat(".").concat( fname[fname.length - 1])
+  const fname = myFile.name.split(".");
+  const newName = username.concat(".").concat(fname[fname.length - 1]);
   const path = `${__dirname}/../public/${newName}`;
 
   await myFile.mv(path, function (err) {
@@ -62,7 +62,7 @@ router.post("/", async (req, res) => {
     username == undefined ||
     password == undefined ||
     email == undefined ||
-    email.split('@')[1] != 'fer.hr'
+    email.split("@")[1] != "fer.hr"
   ) {
     res.status(400);
     res.json({ status: "fail" });
@@ -73,7 +73,7 @@ router.post("/", async (req, res) => {
     firstname,
     surname,
     username,
-    path,
+    newName,
     password,
     email,
   ]);

@@ -139,6 +139,8 @@ const sendRating = (reply) => {
     alert("Couldn't grade post");
   });
 };
+
+const getUrl = (avatar) => "http://localhost:3001/" + avatar;
 </script>
 
 <template>
@@ -151,7 +153,7 @@ const sendRating = (reply) => {
               class="rounded-circle shadow"
               style="height: 75px"
               alt="avatar2"
-              src="https://mdbcdn.b-cdn.net/img/new/avatars/1.webp"
+              :src="getUrl(post.useravatar)"
             />
           </div>
           <h1 class="col-8 d-flex align-items-center">{{ post.posttitle }}</h1>
@@ -239,7 +241,7 @@ const sendRating = (reply) => {
             class="rounded-circle shadow"
             style="height: 75px"
             alt="avatar2"
-            src="https://mdbcdn.b-cdn.net/img/new/avatars/1.webp"
+            :src="getUrl(oneReply.useravatar)"
           />
         </div>
         <div class="p-5 p-sm-3 col-9 col-sm-8" style="font-size: 18px">

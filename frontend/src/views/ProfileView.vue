@@ -98,7 +98,7 @@ const getUrl = (avatar) => "http://localhost:3001/" + avatar;
                   class="rounded-circle shadow"
                   style="height: 75px"
                   alt="avatar2"
-                  src="https://mdbcdn.b-cdn.net/img/new/avatars/1.webp"
+                  :src="getUrl(post.useravatar)"
                 />
               </div>
               <h1 class="col-8 d-flex align-items-center">

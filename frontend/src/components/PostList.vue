@@ -84,6 +84,8 @@ function pushWithQuery(query) {
     },
   });
 }
+
+const getUrl = (avatar) => "http://localhost:3001/" + avatar;
 </script>
 
 <template>
@@ -170,38 +172,38 @@ function pushWithQuery(query) {
     >
       <div class="d-flex align-items-center row mb-3">
         <div class="d-flex align-items-center row mb-3">
-            <div class="col-12 col-md-8 row mb-2">
-              <div class="col-4">
-                <img
-                  class="rounded-circle shadow"
-                  style="height: 75px"
-                  alt="avatar2"
-                  src="https://mdbcdn.b-cdn.net/img/new/avatars/1.webp"
-                />
-              </div>
-              <h1 class="col-8 d-flex align-items-center">
-                {{ post.posttitle }}
-              </h1>
+          <div class="col-12 col-md-8 row mb-2">
+            <div class="col-4">
+              <img
+                class="rounded-circle shadow"
+                style="height: 75px"
+                alt="avatar2"
+                :src="getUrl(post.useravatar)"
+              />
             </div>
-            <div class="col-7 col-md-3">
-              <div class="d-flex justify-content-end align-items-center">
-                <span class="align-middle">{{ post.username }}</span>
-
-                <span class="ms-2 align-middle" style="font-size: 14px">
-                  {{ post.timeofcreation }}
-                </span>
-                <span class="ms-2 align-middle" style="font-size: 14px">
-                  {{ post.posttype }}
-                </span>
-              </div>
-            </div>
-            <button
-              class="btn btn-primary col-4 col-md-1 mx-1"
-              @click="pushWithQuery(post.postid)"
-            >
-              Otvori
-            </button>
+            <h1 class="col-8 d-flex align-items-center">
+              {{ post.posttitle }}
+            </h1>
           </div>
+          <div class="col-7 col-md-3">
+            <div class="d-flex justify-content-end align-items-center">
+              <span class="align-middle">{{ post.username }}</span>
+
+              <span class="ms-2 align-middle" style="font-size: 14px">
+                {{ post.timeofcreation }}
+              </span>
+              <span class="ms-2 align-middle" style="font-size: 14px">
+                {{ post.posttype }}
+              </span>
+            </div>
+          </div>
+          <button
+            class="btn btn-primary col-4 col-md-1 mx-1"
+            @click="pushWithQuery(post.postid)"
+          >
+            Otvori
+          </button>
+        </div>
       </div>
       <div class="pb-3" style="font-size: 18px">
         {{ post.postdescription }}
