@@ -7,13 +7,13 @@ const posts = ref([]);
 const predmeti = ref([]);
 const kategorije = ref([]);
 
-fetch("http://localhost:3001/post/all")
+fetch("http://ax1.axiros.hr:8080/post/all")
   .then((response) => response.json())
   .then((fetchedObject) => {
     posts.value = fetchedObject.posts;
   });
 
-fetch("http://localhost:3001/info")
+fetch("http://ax1.axiros.hr:8080/info")
   .then((response) => response.json())
   .then((fetchedObject) => {
     predmeti.value = fetchedObject.courses;
@@ -54,7 +54,7 @@ const filter = () => {
     abbreviationcourse: currentPredmet.value,
     categoryname: currentKategorija.value,
   };
-  fetch("http://localhost:3001/filter", {
+  fetch("http://ax1.axiros.hr:8080/filter", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -85,7 +85,7 @@ function pushWithQuery(query) {
   });
 }
 
-const getUrl = (avatar) => "http://localhost:3001/" + avatar;
+const getUrl = (avatar) => "http://ax1.axiros.hr:8080/" + avatar;
 </script>
 
 <template>

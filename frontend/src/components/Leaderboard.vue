@@ -2,7 +2,7 @@
 import { ref } from "vue";
 
 const leaderboard = ref([]);
-const users = fetch("http://localhost:3001/get-leadboard")
+const users = fetch("http://ax1.axiros.hr:8080/get-leadboard")
   .then((res) => res.json())
   .then((data) => {
     leaderboard.value = data.leadboard;
