@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 
 router.put("/", async (req, res) => {
   let qString = "INSERT INTO GRADE VALUES ($1, $2, $3, $4)";
-
+  let replyQuery = "UPDATE REPLIES SET STATUSVALUE = $1 WHERE POSTID = $2 AND REPLYCREATORID = $3";
   const secretKey = "tajnikljuc";
   const token = req.headers["authorization"];
 
@@ -29,12 +29,9 @@ router.put("/", async (req, res) => {
     }
 
     try {
-      const query = await db.query(qString, [
-        grade,
-        instructorid,
-        learnerid,
-        postid,
-      ]);
+        const query1 = await db.query(qString, [grade,instructorid, learnerid, postid]);
+        const query2 = await db.query(replyQuery, ['graded', postid, instructorid]);
+
     } catch (DatabaseError) {
       console.error(DatabaseError);
       res.status(400).json({ error: "Could not insert this grade" });
