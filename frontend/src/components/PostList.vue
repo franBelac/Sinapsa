@@ -200,12 +200,9 @@ function pushWithQuery(query) {
       v-for="post in posts"
       class="shadow w-100 bg-light p-2 rounded my-4 mx-auto row mt-2"
     >
-      <div class="d-flex align-items-center">
-        <h1 class="w-75">{{ post.posttitle }}</h1>
-        <button class="btn btn-primary" @click="pushWithQuery(post.postid)">
-          Otvori
-        </button>
-        <div class="w-25">
+      <div class="d-flex align-items-center row mb-3">
+        <h1 class="col-12 col-md-4">{{ post.posttitle }}</h1>
+        <div class="col-7 col-md-6">
           <div class="d-flex justify-content-end align-items-center">
             <span class="align-middle">{{ post.username }}</span>
 
@@ -217,6 +214,9 @@ function pushWithQuery(query) {
             </span>
           </div>
         </div>
+        <button class="btn btn-primary col-4 col-md-1 mx-1" @click="pushWithQuery(post.postid)">
+          Otvori
+        </button>
       </div>
       <div class="pb-3" style="font-size: 18px">
         {{ post.postdescription }}
