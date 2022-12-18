@@ -5,6 +5,14 @@ const db = require("../db");
 const jwt = require("jsonwebtoken");
 const secretKey = "tajnikljuc";
 
+function timestampToDate(rows) {
+    for (const row of rows) {
+      d = new Date(row.replycreated)
+      d = d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear()
+      row.timeofcreation = d
+    }
+  }
+
 async function updateReplyStatus(value, replyid) {
   let qString = "update replies set statusvalue = $1 where replyid = $2";
   let query = await db.query(qString, [value, replyid]);
