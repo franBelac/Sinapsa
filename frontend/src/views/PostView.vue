@@ -144,9 +144,19 @@ const sendRating = (reply) => {
 <template>
   <div>
     <div class="w-75 mx-auto shadow rounded bg-light p-4 my-5">
-      <div class="d-flex align-items-center">
-        <h1 class="w-75">{{ post.posttitle }}</h1>
-        <div class="w-25">
+      <div class="row align-items-center">
+        <div class="col-12 col-md-8 row mb-2">
+          <div class="col-4">
+            <img
+              class="rounded-circle shadow"
+              style="height: 75px"
+              alt="avatar2"
+              src="https://mdbcdn.b-cdn.net/img/new/avatars/1.webp"
+            />
+          </div>
+          <h1 class="col-8 d-flex align-items-center">Title</h1>
+        </div>
+        <div class="col-12 col-md-4">
           <div class="d-flex justify-content-end align-items-center">
             <span class="ms-2 align-middle" style="font-size: 14px">
               {{ post.dateofcreation }}
