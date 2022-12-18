@@ -11,12 +11,13 @@ const username = cookies.get("username");
 const jwt = cookies.get("token");
 const router = useRouter();
 const route = useRoute();
+const ocjena = ref(3);
 const post = ref({
-  postTitle: "",
+  posttitle: "",
   username: "",
-  dateOfCreation: "",
-  postType: "",
-  postDescription: "",
+  dateofcreation: "",
+  posttype: "",
+  postdescription: "",
 });
 
 fetch(`http://localhost:3001/post/distinct/${route.params.postId}`)
@@ -24,6 +25,7 @@ fetch(`http://localhost:3001/post/distinct/${route.params.postId}`)
   .then((res) => {
     replies.value = res.replies;
     post.value = res;
+    console.log(res);
     if (post.value.username === username) {
       isPostOwner.value = true;
     }
@@ -56,14 +58,16 @@ const deletePost = () => {
   fetch(`http://localhost:3001/delete`, {
     method: "DELETE",
     headers: {
+      "Content-Type": "application/json",
       Authorization: jwt,
-      body: JSON.stringify({
-        postid: route.params.postId,
-      }),
     },
+    body: JSON.stringify({
+      id: route.params.postId,
+      explanation: "explainam ti staru",
+    }),
   }).then((res) => {
     if (res.status === 200) {
-      router.push("/");
+      router.go(-1);
       return;
     }
     alert("Couldn't delete post");
@@ -82,17 +86,68 @@ const updatePost = (query) => {
     },
   });
 };
+
+const acceptReply = (reply) => {
+  fetch(`http://localhost:3001/reply/accept/${reply.replyid}`, {
+    method: "POST",
+    headers: {
+      Authorization: jwt,
+    },
+  }).then((res) => {
+    if (res.status === 200) {
+      router.go();
+      return;
+    }
+    alert("Couldn't accept reply");
+  });
+};
+
+const declineReply = (reply) => {
+  fetch(`http://localhost:3001/reply/decline/${reply.replyid}`, {
+    method: "POST",
+    headers: {
+      Authorization: jwt,
+    },
+  }).then((res) => {
+    if (res.status === 200) {
+      router.go();
+      return;
+    }
+    alert("Couldn't decline reply");
+  });
+};
+
+const sendRating = (reply) => {
+  fetch(`http://localhost:3001/grade`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: jwt,
+    },
+    body: JSON.stringify({
+      grade: ocjena.value,
+      instructorid: reply.replycreatorid,
+      postid: route.params.postId,
+    }),
+  }).then((res) => {
+    if (res.status === 201) {
+      router.go();
+      return;
+    }
+    alert("Couldn't create post");
+  });
+};
 </script>
 
 <template>
   <div>
     <div class="w-75 mx-auto shadow rounded bg-light p-4 my-5">
       <div class="d-flex align-items-center">
-        <h1 class="w-75">{{ post.postTitle }}</h1>
+        <h1 class="w-75">{{ post.posttitle }}</h1>
         <div class="w-25">
           <div class="d-flex justify-content-end align-items-center">
             <span class="ms-2 align-middle" style="font-size: 14px">
-              {{ post.dateOfCreation }}
+              {{ post.dateofcreation }}
             </span>
             <span class="ms-2 align-middle" style="font-size: 14px">
               {{ post.username }}
@@ -105,7 +160,7 @@ const updatePost = (query) => {
       </div>
       <div class="row">
         <p class="mt-2 col-12 col-sm-9" style="font-size: 18px">
-          {{ post.postDescription }}
+          {{ post.postdescription }}
         </p>
         <div
           class="col-12 col-sm-3 d-flex align-items-center justify-content-end"
@@ -155,14 +210,18 @@ const updatePost = (query) => {
         </div>
         <hr class="w-75 mx-auto mt-2 mt-md-0" />
         <div class="d-flex justify-content-start pb-1">
-          <div class="mx-2">{{ post.programme }}</div>
-          <div class="mx-2">{{ post.category }}</div>
+          <div class="mx-2">{{ post.programename }}</div>
+          <div class="mx-2">{{ post.categoryname }}</div>
+          <div class="mx-2">{{ post.coursename }}</div>
         </div>
       </div>
     </div>
 
     <div class="w-75 mx-auto" v-for="oneReply in replies">
-      <div class="shadow w-100 bg-light p-2 row rounded my-4 mx-auto row">
+      <div
+        class="shadow w-100 bg-light p-2 row rounded my-4 mx-auto row"
+        v-if="oneReply.statusvalue != 'declined'"
+      >
         <div class="p-3 col-12 col-sm-9" style="font-size: 18px">
           {{ oneReply.replytext }}
         </div>
@@ -177,7 +236,8 @@ const updatePost = (query) => {
             <button
               type="button"
               class="btn btn-labeled btn-success mx-1"
-              v-if="isPostOwner"
+              v-if="isPostOwner && !(oneReply.statusvalue == 'accepted')"
+              @click="acceptReply(oneReply)"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -198,7 +258,8 @@ const updatePost = (query) => {
             <button
               type="button"
               class="btn btn-labeled btn-danger mx-1"
-              v-if="isPostOwner"
+              v-if="isPostOwner && !(oneReply.statusvalue == 'accepted')"
+              @click="declineReply(oneReply)"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -237,6 +298,25 @@ const updatePost = (query) => {
                   d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"
                 />
               </svg>
+            </button>
+            <select
+              required
+              class="form-select w-100 mx-auto my-1 my-md-3"
+              aria-label="Default select example"
+              v-model="ocjena"
+              v-if="isPostOwner && oneReply.statusvalue == 'accepted'"
+            >
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3" selected>3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+            <button
+              @click="sendRating(oneReply)"
+              v-if="isPostOwner && oneReply.statusvalue == 'accepted'"
+            >
+              Ocijeni pomagača
             </button>
           </div>
         </div>

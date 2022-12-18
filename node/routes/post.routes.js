@@ -5,11 +5,11 @@ const path = require("path");
 const db = require("../db");
 
 const postWCatQuerry =
-  'select \
+  "select \
     postid, posttitle, postdescription, username, timeofcreation, categoryname, abbreviationcourse, programename \
     from post join registered on post.creatoruserid = registered.userid \
     natural join category natural join course\
-    join study_programme on course.programmeid = study_programme.programmeid';
+    join study_programme on course.programmeid = study_programme.programmeid";
 
 router.put("/", async (req, res) => {
   const title = req.body.title;
@@ -66,7 +66,7 @@ router.get("/distinct/:postId", async (req, res) => {
 
   let body = Object();
   const post = query.rows[0];
-  body.postid=post.postid
+  body.postid = post.postid;
   body.categoryid = post.categoryid;
   body.programmeid = post.programmeid;
   body.courseid = post.courseid;
@@ -76,16 +76,14 @@ router.get("/distinct/:postId", async (req, res) => {
   body.postcreatorid = post.creatoruserid;
   body.categoryname = post.categoryname;
   body.coursename = post.coursename;
-  body.abbreviatoncourse=post.abbreviatoncourse
-  body.programename=post.programename
-  
+  body.abbreviatoncourse = post.abbreviatoncourse;
+  body.programename = post.programename;
 
   const userId = post.creatoruserid;
 
-  query = await db.query(
-    "select * from registered where userid = $1",
-    [userId]
-  );
+  query = await db.query("select * from registered where userid = $1", [
+    userId,
+  ]);
 
   body.firstname = query.rows[0].firstname;
   body.lastname = query.rows[0].lastname;
@@ -95,7 +93,7 @@ router.get("/distinct/:postId", async (req, res) => {
   body.created = query.rows[0].created;
 
   query = await db.query(
-    "select replyid, replytext, replycreated, username from replies join registered on replies.replycreatorid = registered.userid where postid = $1",
+    "select * from replies join registered on replies.replycreatorid = registered.userid where postid = $1",
     [postId]
   );
 
