@@ -90,8 +90,20 @@ const newPost = () => {
           class="shadow w-100 bg-light p-2 rounded my-4 mx-auto row mt-2"
         >
           <div class="d-flex align-items-center row mb-3">
-            <h1 class="col-12 col-md-4">{{ post.posttitle }}</h1>
-            <div class="col-7 col-md-6">
+            <div class="col-12 col-md-8 row mb-2">
+              <div class="col-4">
+                <img
+                  class="rounded-circle shadow"
+                  style="height: 75px"
+                  alt="avatar2"
+                  src="https://mdbcdn.b-cdn.net/img/new/avatars/1.webp"
+                />
+              </div>
+              <h1 class="col-8 d-flex align-items-center">
+                {{ post.posttitle }}
+              </h1>
+            </div>
+            <div class="col-7 col-md-3">
               <div class="d-flex justify-content-end align-items-center">
                 <span class="align-middle">{{ post.username }}</span>
 

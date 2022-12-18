@@ -82,13 +82,14 @@ if (cookies.get("token")) {
               />
             </div>
             <div class="col-12">
-              <label for="avatar" class="form-label">Avatar</label>
+              <label for="avatar" class="form-label mx-2">Avatar</label>
               <input
                 type="file"
                 id="file"
                 name="file"
                 accept="image/*"
                 ref="image"
+                class="mx-3"
               />
             </div>
             <div class="col-12">

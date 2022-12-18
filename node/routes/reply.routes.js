@@ -9,7 +9,7 @@ function timestampToDate(rows) {
     for (const row of rows) {
       d = new Date(row.replycreated)
       d = d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear()
-      row.timeofcreation = d
+      row.replycreated = d
     }
   }
 
@@ -84,6 +84,7 @@ router.get("/get/:replyid", async (req, res) => {
   const getQuerry = "select * from replies where replyid = $1";
   let reply = await db.query(getQuerry, [replyid]);
   if (reply) {
+    timestampToDate(reply.rows)
     rv = reply.rows[0];
     res.json({ reply: rv });
     res.status(200);
@@ -98,6 +99,7 @@ router.get("/getall/:postid", async (req, res) => {
   const getQuerry = "select * from replies where postid = $1";
   let reply = await db.query(getQuerry, [postid]);
   if (reply) {
+    timestampToDate(reply.rows)
     rv = reply.rows;
     res.json({ replies: rv });
     res.status(200);
