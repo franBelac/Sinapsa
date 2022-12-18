@@ -89,7 +89,7 @@ function pushWithQuery(query) {
 <template>
   <div class="m-1">
     <div class="btn-group">
-      <h5>FILTER BY:</h5>
+      <h5>FILTRIRAJ PO:</h5>
     </div>
     <div class="btn-group m-1">
       <button

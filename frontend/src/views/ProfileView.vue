@@ -16,9 +16,11 @@ const user = ref({
   firstname: "name",
   lastname: "lastname",
   email: "email",
+  userid: 0,
 });
 
 const posts = ref([]);
+const replies = ref([]);
 
 const realUsername = cookies.get("username");
 
@@ -26,12 +28,17 @@ fetch(`http://localhost:3001/user/${realUsername}`)
   .then((res) => res.json())
   .then((res) => {
     user.value = res;
+    fetch(`http://localhost:3001/user/replies/${user.value.userid}`)
+      .then((res) => res.json())
+      .then((res) => {
+        replies.value = res;
+        console.log(replies.value);
+      });
   });
 
 fetch(`http://localhost:3001/post/user/${realUsername}`)
   .then((res) => res.json())
   .then((res) => {
-    console.log(res);
     posts.value = res.posts;
   });
 
@@ -128,14 +135,18 @@ const newPost = () => {
         <hr class="w-100 my-5" />
         <h1 class="mb-5">Moji upiti</h1>
         <div
-          id="comment1"
           class="shadow w-100 bg-light p-3 rounded my-4 mx-auto row mt-2 mb-3"
+          v-for="reply in replies"
         >
           <div class="col-12 col-md-9 p-2">
-            Moj dummy odgovor jedan, haha moj odgovor
+            {{ reply.replytext }}
           </div>
           <div class="col-12 col-md-3">
-            <button type="button" class="btn btn-labeled btn-primary mx-1">
+            <button
+              type="button"
+              class="btn btn-labeled btn-primary mx-1"
+              @click="pushWithQuery(reply.postid)"
+            >
               Otvori Objavu
             </button>
           </div>

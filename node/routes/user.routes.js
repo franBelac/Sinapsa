@@ -19,7 +19,7 @@ router.get("/:username", async (req, res) => {
   const username = req.params.username;
 
   let qString =
-    "select username, firstname, lastname, email, created from registered where username = $1";
+    "select userid, username, firstname, lastname, email, created from registered where username = $1";
   const query = await db.query(qString, [username]);
 
   if (query.rowCount == 0) {
