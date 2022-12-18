@@ -42,14 +42,21 @@ router.post("/", async (req, res) => {
   const firstname = req.body.name;
   const surname = req.body.surname;
   const username = req.body.username;
-  const avatar = req.body.avatar;
   const email = req.body.email;
   const password = req.body.password;
+
+  const myFile = req.files.file;
+
+  await myFile.mv(`${__dirname}/../public/${myFile.name}`, function (err) {
+    if (err) {
+      return res.status(500).send({ msg: "Error occured" });
+    }
+  });
+
   if (
     firstname == undefined ||
     surname == undefined ||
     username == undefined ||
-    avatar == undefined ||
     password == undefined ||
     email == undefined
   ) {
@@ -62,14 +69,14 @@ router.post("/", async (req, res) => {
     firstname,
     surname,
     username,
-    avatar,
+    "nema avatara",
     password,
     email,
   ]);
 
   sendConfirmationEmail(email, username);
 
-  res.json({ status: "success1" });
+  res.status(201).end();
   return;
 });
 

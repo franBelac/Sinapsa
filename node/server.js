@@ -3,11 +3,13 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 const cors = require("cors");
+const fileUpload = require("express-fileupload");
 
 const https = require("https");
 const fs = require("fs");
 
 const app = express();
+app.use(fileUpload());
 
 app.use(cors());
 

@@ -1,22 +1,13 @@
 <script setup>
-const users = [
-  {
-    username: "anamarija",
-    points: 100,
-  },
-  {
-    username: "kemal",
-    points: 90,
-  },
-  {
-    username: "serif",
-    points: 80,
-  },
-  {
-    username: "mehmed",
-    points: 70,
-  },
-];
+import { ref } from "vue";
+
+const leaderboard = ref([]);
+const users = fetch("http://localhost:3001/get-leadboard")
+  .then((res) => res.json())
+  .then((data) => {
+    leaderboard.value = data.leadboard;
+    console.log(leaderboard.value);
+  });
 </script>
 
 <template>
@@ -32,10 +23,10 @@ const users = [
         </tr>
       </thead>
       <tbody>
-        <tr v-for="user in users">
-          <th scope="row">{{ users.indexOf(user) + 1 }}</th>
-          <td>{{ user.username }}</td>
-          <td>{{ user.points }}</td>
+        <tr v-for="user in leaderboard">
+          <th scope="row">{{ leaderboard.indexOf(user) + 1 }}</th>
+          <td>{{ user.user.username }}</td>
+          <td>{{ user.grade }}</td>
         </tr>
       </tbody>
     </table>
