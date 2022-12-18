@@ -6,7 +6,7 @@ const db = require("../db");
 
 const postWCatQuerry =
   "select \
-    postid, posttitle, postdescription, username, date(timeofcreation) as timeofcreation, categoryname, abbreviationcourse, programename \
+    postid, posttitle, postdescription, username, date(timeofcreation) as timeofcreation, categoryname, abbreviationcourse, programename, useravatar \
     from post join registered on post.creatoruserid = registered.userid \
     natural join category natural join course\
     join study_programme on course.programmeid = study_programme.programmeid"
@@ -110,6 +110,7 @@ router.get("/distinct/:postId", async (req, res) => {
   body.useravatar = query.rows[0].useravatar;
   body.email = query.rows[0].email;
   body.created = query.rows[0].created;
+  body.useravatar = query.rows[0].useravatar
 
   query = await db.query(
     "select * from replies join registered on replies.replycreatorid = registered.userid where postid = $1",
