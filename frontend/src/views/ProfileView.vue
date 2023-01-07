@@ -64,7 +64,7 @@ const newPost = () => {
 
 const editProfile = () => {
   router.push(
-    name:"tu treba za bekend",
+    name:"updateProfile",
   );
 }
 
