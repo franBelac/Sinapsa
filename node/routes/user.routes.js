@@ -59,7 +59,7 @@ router.post("/change", async (req, res) => {
 
   if (newPassword!=""){
     if (newPassword.length<8 ){
-      res.status(401).json({ error: "password needs to be at least 8 characters long" });
+      res.status(401).json({ error: "password needs to be at least 8 characters long" }).end();
     }
     else{
       let qString2 =
@@ -74,7 +74,7 @@ router.post("/change", async (req, res) => {
     let query = await db.query(qString, [newUsername,userId]);
   }
 
-  res.status(200).json(query.rows,query2.rows);
+  res.status(200).end();
 });
 
 module.exports = router;
