@@ -31,7 +31,7 @@ const handleRegister = () => {
   data.append("email", email.value);
   data.append("password", password.value);
 
-  fetch("http://localhost:3001/register", {
+  fetch("http://ax1.axiros.hr:8080/register", {
     method: "POST",
     headers: {},
     body: data,

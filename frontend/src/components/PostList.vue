@@ -1,6 +1,9 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
+import { useCookies } from "vue3-cookies";
+const { cookies } = useCookies();
+const token = cookies.get("token")
 const router = useRouter();
 const route = useRoute();
 const posts = ref([]);
@@ -176,7 +179,7 @@ const getUrl = (avatar) => "http://ax1.axiros.hr:8080/" + avatar;
             <div class="col-4">
               <img
                 class="rounded-circle shadow"
-                style="height: 75px"
+                style="height: 75px; width: 75px"
                 alt="avatar2"
                 :src="getUrl(post.useravatar)"
               />
@@ -187,7 +190,8 @@ const getUrl = (avatar) => "http://ax1.axiros.hr:8080/" + avatar;
           </div>
           <div class="col-7 col-md-3">
             <div class="d-flex justify-content-end align-items-center">
-              <span class="align-middle">{{ post.username }}</span>
+              <span class="align-middle mx-1">{{ post.username }}</span>
+              <span class="align-middle mx-1">{{ post.email }}</span>
 
               <span class="ms-2 align-middle" style="font-size: 14px">
                 {{ post.timeofcreation }}
@@ -200,6 +204,7 @@ const getUrl = (avatar) => "http://ax1.axiros.hr:8080/" + avatar;
           <button
             class="btn btn-primary col-4 col-md-1 mx-1"
             @click="pushWithQuery(post.postid)"
+            v-if="token"
           >
             Otvori
           </button>
