@@ -51,4 +51,14 @@ router.get("/replies/recieved/:id", async (req, res) => {
   res.status(200).json(query.rows);
 });
 
+router.get("/change/username", async (req, res) => {
+  const id = req.params.id;
+  const noviUsername = req.params.username;
+  let qString =
+    "update registered set userName=$1 where userName=$2"
+  let query = await db.query(qString, [newUsername,id]);
+
+  res.status(200).json(query.rows);
+});
+
 module.exports = router;
