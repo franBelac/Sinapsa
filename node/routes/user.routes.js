@@ -57,8 +57,23 @@ router.post("/change", async (req, res) => {
   const newPassword = req.body.newPassword;
   const currentPassword = req.body.currentPassword;
 
+  let qStringPassword =
+    "from registered select password where userid=$1";
+  let databasePassword = await db.query(qStringPassword, [userId]);
+  
+  if (databasePassword){
+    let row = databasePassword.rows[0];
+    databasePassword= row.password;
+    if (databasePassword!=currentPassword){
+      res.status(401).json({ error: "currentPassword and databasePassword do not match" }).end();
+    }
+  }
+  else{
+    res.status(401).json({ error: "no password in database" }).end();
+  }
+
   if (newPassword!=""){
-    if (newPassword.length<8 ){
+    if (newPassword.length<8){
       res.status(401).json({ error: "password needs to be at least 8 characters long" }).end();
     }
     else{
