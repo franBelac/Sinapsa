@@ -21,7 +21,9 @@ const kategorije = ref([]);
 
 if (route.params.postId) {
   postId.value = route.params.postId;
-  fetch(`http://ax1.axiros.hr:8080/post/distinct/${route.params.postId}`)
+  fetch(
+    `${import.meta.env.VITE_BACKEND_URL}/post/distinct/${route.params.postId}`
+  )
     .then((res) => res.json())
     .then((res) => {
       description.value = res.postdescription;
@@ -29,7 +31,7 @@ if (route.params.postId) {
     });
 }
 
-fetch("http://ax1.axiros.hr:8080/info")
+fetch(`${import.meta.env.VITE_BACKEND_URL}/info`)
   .then((response) => response.json())
   .then((fetchedObject) => {
     predmeti.value = fetchedObject.courses;
@@ -51,7 +53,7 @@ const sendPost = async () => {
     return;
   }
   router.go(-1);
-  await fetch("http://ax1.axiros.hr:8080/update", {
+  await fetch(`${import.meta.env.VITE_BACKEND_URL}/update`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

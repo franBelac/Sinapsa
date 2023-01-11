@@ -20,7 +20,9 @@ const post = ref({
   postdescription: "",
 });
 
-fetch(`http://ax1.axiros.hr:8080/post/distinct/${route.params.postId}`)
+fetch(
+  `${import.meta.env.VITE_BACKEND_URL}/post/distinct/${route.params.postId}`
+)
   .then((res) => res.json())
   .then((res) => {
     replies.value = res.replies;
@@ -32,7 +34,7 @@ fetch(`http://ax1.axiros.hr:8080/post/distinct/${route.params.postId}`)
   });
 
 const postReply = () => {
-  fetch("http://ax1.axiros.hr:8080/reply", {
+  fetch(`${import.meta.env.VITE_BACKEND_URL}/reply`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -88,7 +90,7 @@ const updatePost = (query) => {
 };
 
 const acceptReply = (reply) => {
-  fetch(`http://ax1.axiros.hr:8080/reply/accept/${reply.replyid}`, {
+  fetch(`${import.meta.env.VITE_BACKEND_URL}/reply/accept/${reply.replyid}`, {
     method: "POST",
     headers: {
       Authorization: jwt,
@@ -103,7 +105,7 @@ const acceptReply = (reply) => {
 };
 
 const declineReply = (reply) => {
-  fetch(`http://ax1.axiros.hr:8080/reply/decline/${reply.replyid}`, {
+  fetch(`${import.meta.env.VITE_BACKEND_URL}/reply/decline/${reply.replyid}`, {
     method: "POST",
     headers: {
       Authorization: jwt,
@@ -119,7 +121,7 @@ const declineReply = (reply) => {
 
 const sendRating = (reply) => {
   console.log(reply);
-  fetch(`http://ax1.axiros.hr:8080/grade`, {
+  fetch(`${import.meta.env.VITE_BACKEND_URL}/grade`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -140,7 +142,7 @@ const sendRating = (reply) => {
   });
 };
 
-const getUrl = (avatar) => "http://ax1.axiros.hr:8080/" + avatar;
+const getUrl = (avatar) => `${import.meta.env.VITE_BACKEND_URL}/` + avatar;
 </script>
 
 <template>

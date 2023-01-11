@@ -3,20 +3,20 @@ import { ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useCookies } from "vue3-cookies";
 const { cookies } = useCookies();
-const token = cookies.get("token")
+const token = cookies.get("token");
 const router = useRouter();
 const route = useRoute();
 const posts = ref([]);
 const predmeti = ref([]);
 const kategorije = ref([]);
 
-fetch("http://ax1.axiros.hr:8080/post/all")
+fetch(`${import.meta.env.VITE_BACKEND_URL}/post/all`)
   .then((response) => response.json())
   .then((fetchedObject) => {
     posts.value = fetchedObject.posts;
   });
 
-fetch("http://ax1.axiros.hr:8080/info")
+fetch(`${import.meta.env.VITE_BACKEND_URL}/info`)
   .then((response) => response.json())
   .then((fetchedObject) => {
     predmeti.value = fetchedObject.courses;
@@ -57,7 +57,7 @@ const filter = () => {
     abbreviationcourse: currentPredmet.value,
     categoryname: currentKategorija.value,
   };
-  fetch("http://ax1.axiros.hr:8080/filter", {
+  fetch(`${import.meta.env.VITE_BACKEND_URL}/filter`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -81,7 +81,6 @@ const newPost = () => {
   });
 };
 
-
 function pushWithQuery(query) {
   router.push({
     name: "post",
@@ -95,7 +94,7 @@ function pushWithQuery(query) {
   });
 }
 
-const getUrl = (avatar) => "http://ax1.axiros.hr:8080/" + avatar;
+const getUrl = (avatar) => `${import.meta.env.VITE_BACKEND_URL}/` + avatar;
 </script>
 
 <template>
@@ -174,20 +173,17 @@ const getUrl = (avatar) => "http://ax1.axiros.hr:8080/" + avatar;
       </button>
     </div>
 
-
     <div class="btn-group m-1">
-      <button 
-      type="button"
-      class="btn btn-labeled btn-success mx-1" 
-      v-if="token"
-      @click="newPost">
-      Novi oglas
+      <button
+        type="button"
+        class="btn btn-labeled btn-success mx-1"
+        v-if="token"
+        @click="newPost"
+      >
+        Novi oglas
       </button>
     </div>
   </div>
-
-  
-
 
   <div class="col-md-8 p-3 pt-5">
     <div

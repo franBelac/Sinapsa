@@ -1,16 +1,13 @@
 <script setup>
 import { RouterLink, RouterView } from "vue-router";
-import { storeToRefs } from "pinia";
 import { useCredentialsStore } from "./stores/credentials";
 import { useCookies } from "vue3-cookies";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 const credentialsStore = useCredentialsStore();
-const { username, token } = storeToRefs(credentialsStore);
 const { cookies } = useCookies();
-token.value = cookies.get("token");
-username.value = cookies.get("username");
+const token = cookies.get("token");
 const handleLogout = () => {
   credentialsStore.$reset();
   cookies.remove("token");
