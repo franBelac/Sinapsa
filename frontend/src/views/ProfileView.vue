@@ -9,7 +9,7 @@ const { cookies } = useCookies();
 const jwt = cookies.get("token");
 
 if (!jwt) {
-  router.push("/");
+  router.push("/login");
 }
 
 const user = ref({

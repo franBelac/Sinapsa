@@ -7,7 +7,7 @@ const route = useRoute();
 const router = useRouter();
 const jwt = cookies.get("token");
 if (!jwt) {
-  router.push("/");
+  router.push("/login");
 }
 
 const postId = ref(null);

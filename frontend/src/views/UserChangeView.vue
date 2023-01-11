@@ -8,9 +8,17 @@ const password = ref("");
 const newPassword = ref("");
 const user = ref({});
 const { cookies } = useCookies();
-const currentUsername = cookies.get("username");
+const jwt = cookies.get("token");
+if (!jwt) {
+  router.push("/login");
+}
 
-fetch(`${import.meta.env.VITE_BACKEND_URL}/user/${currentUsername}`)
+fetch(`${import.meta.env.VITE_BACKEND_URL}/user`, {
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: jwt,
+  },
+})
   .then((res) => res.json())
   .then((res) => {
     user.value = res;
@@ -28,11 +36,11 @@ const handleChange = () => {
     newPassword: sendPassword,
     currentPassword: password.value,
   };
-  console.log(body);
   fetch(`${import.meta.env.VITE_BACKEND_URL}/user/change`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: jwt,
     },
     body: JSON.stringify(body),
   })

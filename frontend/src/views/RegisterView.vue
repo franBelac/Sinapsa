@@ -33,7 +33,6 @@ const handleRegister = () => {
 
   fetch(`${import.meta.env.VITE_BACKEND_URL}/register`, {
     method: "POST",
-    headers: {},
     body: data,
   }).then((res) => {
     console.log(res);

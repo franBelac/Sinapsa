@@ -1,19 +1,27 @@
 <script setup>
 import { RouterLink, RouterView } from "vue-router";
-import { useCredentialsStore } from "./stores/credentials";
 import { useCookies } from "vue3-cookies";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
-const credentialsStore = useCredentialsStore();
 const { cookies } = useCookies();
 const token = cookies.get("token");
 const handleLogout = () => {
-  credentialsStore.$reset();
   cookies.remove("token");
-  cookies.remove("username");
-  router.push("/");
+  router.push("/login");
 };
+if (token) {
+  fetch(`${import.meta.env.VITE_BACKEND_URL}/verify`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token,
+    },
+  }).then((res) => {
+    if (!res.status == 200) {
+      handleLogout();
+    }
+  });
+}
 </script>
 
 <template>

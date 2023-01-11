@@ -10,6 +10,9 @@ const replies = ref([]);
 const username = cookies.get("username");
 const jwt = cookies.get("token");
 const router = useRouter();
+if (!jwt) {
+  router.push("/login");
+}
 const route = useRoute();
 const ocjena = ref(3);
 const post = ref({
@@ -57,7 +60,7 @@ const deletePost = () => {
   if (!confirm("Are you sure you want to delete this post?")) {
     return;
   }
-  fetch(`http://ax1.axiros.hr:8080/delete`, {
+  fetch(`${import.meta.env.VITE_BACKEND_URL}/delete`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
