@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 const path = require("path");
 const db = require("../db");
+const jwt = require("jsonwebtoken");
 
 const postWCatQuerry =
   "select \
@@ -141,14 +142,33 @@ router.get("/comments/:id", async (req, res) => {
 });
 
 router.get("/user/:username", async (req, res) => {
-  const username = req.params.username;
-  let qString = postWCatQuerry + " where username = $1";
-  let query = await db.query(qString, [username]);
-
-  let body = Object();
-  timestampToDate(query.rows)
-  body.posts = query.rows;
-  res.status(200).json(body);
+  const secretKey = 'tajnikljuc'
+  const token = req.headers["authorization"];
+  jwt.verify(token, secretKey, async (err, decoded) => {
+    if (err) {
+      res.status(401);
+      res.json({});
+      return;
+    }
+    const payload = decoded;
+    const id = payload.id;
+    let qString1 = "select username from registered where userid = $1";
+    const query1 = await db.query(qString1, [id]);
+    if (query1.rowCount == 0) {
+      res.status(404).end();
+      return;
+    }
+    const username = query1.rows[0].username;
+    let qString2 = postWCatQuerry + " where username = $1";
+    let query2 = await db.query(qString2, [username]);
+  
+    let body = Object();
+    timestampToDate(query2.rows)
+    body.posts = query2.rows;
+    res.status(200).json(body);
+    return
+  });
+  res.status(401).json({ error: "Invalid jwt token" })
 });
 
 module.exports = router;
