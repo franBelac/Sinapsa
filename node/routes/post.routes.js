@@ -141,7 +141,7 @@ router.get("/comments/:id", async (req, res) => {
   res.status(200).json(query.rows);
 });
 
-router.get("/user/:username", async (req, res) => {
+router.get("/user", async (req, res) => {
   const secretKey = 'tajnikljuc'
   const token = req.headers["authorization"];
   jwt.verify(token, secretKey, async (err, decoded) => {
