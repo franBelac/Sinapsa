@@ -11,6 +11,7 @@ const { cookies } = useCookies();
 const jwt = cookies.get("token");
 if (!jwt) {
   router.push("/login");
+  router.go(1);
 }
 
 fetch(`${import.meta.env.VITE_BACKEND_URL}/user`, {

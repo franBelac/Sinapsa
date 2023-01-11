@@ -8,6 +8,7 @@ const router = useRouter();
 const jwt = cookies.get("token");
 if (!jwt) {
   router.push("/login");
+  router.go(1);
 }
 
 const postId = ref(null);

@@ -12,6 +12,7 @@ const jwt = cookies.get("token");
 const router = useRouter();
 if (!jwt) {
   router.push("/login");
+  router.go(1);
 }
 const route = useRoute();
 const ocjena = ref(3);

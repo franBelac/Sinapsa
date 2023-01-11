@@ -9,6 +9,7 @@ const token = cookies.get("token");
 const handleLogout = () => {
   cookies.remove("token");
   router.push("/login");
+  router.go(0);
 };
 if (token) {
   fetch(`${import.meta.env.VITE_BACKEND_URL}/verify`, {
