@@ -83,7 +83,19 @@ router.get("/replies/recieved", async (req, res) => {
 router.post("/change", async (req, res) => {
   console.log("daco was here")
   console.log(req.body)
-  const userId = req.body.userId;
+  const token = req.headers["authorization"];
+  const secretKey = "tajnikljuc";
+  let id = -1;
+  jwt.verify(token, secretKey, async (err, decoded) => {
+    if (err) {
+      res.status(401);
+      res.json({});
+      return;
+    }
+    const payload = decoded;
+    id = payload.id;
+  });
+  const userId = id;
   const newUsername = req.body.newUsername;
   const newPassword = req.body.newPassword;
   const currentPassword = req.body.currentPassword;

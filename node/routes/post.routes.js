@@ -27,7 +27,7 @@ function replyTimestampToDate(rows) {
     row.replycreated = d
   }
 }
-
+//OVO NE KORISTIMO!!!!
 router.put("/", async (req, res) => {
   const title = req.body.title;
   const description = req.body.description;
@@ -168,7 +168,6 @@ router.get("/user/:username", async (req, res) => {
     res.status(200).json(body);
     return
   });
-  res.status(401).json({ error: "Invalid jwt token" })
 });
 
 module.exports = router;
