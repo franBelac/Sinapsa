@@ -75,6 +75,13 @@ const filter = () => {
   currentKategorija.value = "KATEGORIJA";
 };
 
+const newPost = () => {
+  router.push({
+    name: "create",
+  });
+};
+
+
 function pushWithQuery(query) {
   router.push({
     name: "post",
@@ -166,7 +173,21 @@ const getUrl = (avatar) => "http://ax1.axiros.hr:8080/" + avatar;
         FILTER
       </button>
     </div>
+
+
+    <div class="btn-group m-1">
+      <button 
+      type="button"
+      class="btn btn-labeled btn-success mx-1" 
+      v-if="token"
+      @click="newPost">
+      Novi oglas
+      </button>
+    </div>
   </div>
+
+  
+
 
   <div class="col-md-8 p-3 pt-5">
     <div
