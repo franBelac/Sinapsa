@@ -9,7 +9,7 @@ const password = ref("");
 const credentials = useCredentialsStore();
 const { cookies } = useCookies();
 const handleLogin = () => {
-  fetch("http://localhost:3001/login", {
+  fetch("http://ax1.axiros.hr:8080/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
