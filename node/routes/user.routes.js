@@ -51,4 +51,45 @@ router.get("/replies/recieved/:id", async (req, res) => {
   res.status(200).json(query.rows);
 });
 
+router.post("/change", async (req, res) => {
+  const userId = req.body.userId;
+  const newUsername = req.body.newUsername;
+  const newPassword = req.body.newPassword;
+  const currentPassword = req.body.currentPassword;
+
+  let qStringPassword =
+    "from registered select password where userid=$1";
+  let databasePassword = await db.query(qStringPassword, [userId]);
+  
+  if (databasePassword){
+    let row = databasePassword.rows[0];
+    databasePassword= row.password;
+    if (databasePassword!=currentPassword){
+      res.status(401).json({ error: "currentPassword and databasePassword do not match" }).end();
+    }
+  }
+  else{
+    res.status(401).json({ error: "no password in database" }).end();
+  }
+
+  if (newPassword!=""){
+    if (newPassword.length<8){
+      res.status(401).json({ error: "password needs to be at least 8 characters long" }).end();
+    }
+    else{
+      let qString2 =
+      "update registered set password=$1 where userid=$2";
+      let query2 = await db.query(qString2, [newPassword,userId]);
+    }
+  }
+
+  if (newUsername!="" ){
+    let qString =
+    "update registered set username=$1 where userid=$2";
+    let query = await db.query(qString, [newUsername,userId]);
+  }
+
+  res.status(200).end();
+});
+
 module.exports = router;
