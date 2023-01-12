@@ -61,6 +61,14 @@ const newPost = () => {
   });
 };
 
+
+const editProfile = () => {
+  router.push(
+    name:"updateProfile",
+  );
+}
+
+
 const getUrl = (avatar) => "http://localhost:3001/" + avatar;
 </script>
 
@@ -79,6 +87,9 @@ const getUrl = (avatar) => "http://localhost:3001/" + avatar;
           <label>{{ user.firstname }} {{ user.lastname }}</label
           ><br />
           <p>{{ user.email }}</p>
+          <button class="btn btn-labeled btn-success mx-1" @click="editProfile">
+            Uredi profil
+          </button>
           <button class="btn btn-labeled btn-success mx-1" @click="newPost">
             Novi oglas
           </button>
