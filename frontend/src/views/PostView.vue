@@ -7,9 +7,9 @@ const isAdmin = ref(false);
 const reply = ref("");
 const isPostOwner = ref(false);
 const replies = ref([]);
-const username = cookies.get("username");
 const jwt = cookies.get("token");
 const router = useRouter();
+const user = ref({});
 if (!jwt) {
   router.push("/login");
   router.go(1);
@@ -24,17 +24,28 @@ const post = ref({
   postdescription: "",
 });
 
-fetch(
-  `${import.meta.env.VITE_BACKEND_URL}/post/distinct/${route.params.postId}`
-)
+fetch(`${import.meta.env.VITE_BACKEND_URL}/user`, {
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: jwt,
+  },
+})
   .then((res) => res.json())
   .then((res) => {
-    replies.value = res.replies;
-    post.value = res;
-    console.log(res);
-    if (post.value.username === username) {
-      isPostOwner.value = true;
-    }
+    user.value = res;
+
+    fetch(
+      `${import.meta.env.VITE_BACKEND_URL}/post/distinct/${route.params.postId}`
+    )
+      .then((res) => res.json())
+      .then((res) => {
+        replies.value = res.replies;
+        post.value = res;
+        console.log(res);
+        if (post.value.username === user.value.username) {
+          isPostOwner.value = true;
+        }
+      });
   });
 
 const postReply = () => {
@@ -124,7 +135,6 @@ const declineReply = (reply) => {
 };
 
 const sendRating = (reply) => {
-  console.log(reply);
   fetch(`${import.meta.env.VITE_BACKEND_URL}/grade`, {
     method: "PUT",
     headers: {
