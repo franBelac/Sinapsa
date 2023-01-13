@@ -29,7 +29,7 @@ router.get("/", async (req, res) => {
     const payload = decoded;
     const id = payload.id;
     let qString1 = 
-     "select userid, username, firstname, lastname, email, created, useravatar from registered where userid = $1";
+     "select userid, username, firstname, lastname, email, created, useravatar from registered where userid = $1;";
     const qString2 = "select userid from Moderator where userid = $1;";
 
 

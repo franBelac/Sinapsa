@@ -14,6 +14,12 @@ const postWCatQuerry =
     where (current_date- date(timeofcreation) )<30\
     order by timeofcreation desc";
 
+const dacoJeKrivStaOvoNijeRadilo =
+  "select \
+    postid, posttitle, postdescription, username, date(timeofcreation) as timeofcreation, categoryname, abbreviationcourse, programename, useravatar \
+    from post join registered on post.creatoruserid = registered.userid \
+    natural join category natural join course \
+    join study_programme on course.programmeid = study_programme.programmeid ";
 function timestampToDate(rows) {
   for (const row of rows) {
     d = new Date(row.timeofcreation);
@@ -161,7 +167,12 @@ router.get("/user", async (req, res) => {
       return;
     }
     const username = query1.rows[0].username;
-    let qString2 = postWCatQuerry + " where username = $1";
+    let qString2 =
+      dacoJeKrivStaOvoNijeRadilo +
+      "where username = $1" +
+      " and (current_date- date(timeofcreation) )<30\
+                                                  order by timeofcreation desc";
+    console.log("ma ovo nema smisla");
     let query2 = await db.query(qString2, [username]);
 
     let body = Object();
