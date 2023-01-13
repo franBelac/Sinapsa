@@ -32,10 +32,8 @@ fetch(`${import.meta.env.VITE_BACKEND_URL}/user`, {
 })
   .then((res) => res.json())
   .then((res) => {
-    user.value = res;
-    if (user.value.username == "moderator") {
-      isAdmin.value = true;
-    }
+    user.value = res.user;
+    isAdmin.value = res.isAdmin;
 
     fetch(
       `${import.meta.env.VITE_BACKEND_URL}/post/distinct/${route.params.postId}`
@@ -44,7 +42,6 @@ fetch(`${import.meta.env.VITE_BACKEND_URL}/user`, {
       .then((res) => {
         replies.value = res.replies;
         post.value = res;
-        console.log(res);
         if (post.value.username === user.value.username) {
           isPostOwner.value = true;
         }

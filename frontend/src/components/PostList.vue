@@ -32,7 +32,6 @@ const currentKategorija = ref("KATEGORIJA");
 const smjerovi = ["R", "E"];
 
 const setFilter = (filterType, newValue) => {
-  console.log(newValue);
   if (filterType === "smjer") {
     currentSmjer.value = newValue;
   } else if (filterType === "predmet") {
@@ -66,7 +65,6 @@ const filter = () => {
   })
     .then((response) => response.json())
     .then((fetchedObject) => {
-      console.log(fetchedObject);
       posts.value = fetchedObject.posts;
     });
 
