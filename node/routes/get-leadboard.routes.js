@@ -84,7 +84,7 @@ router.get("/", async (req, res) => {
     console.log("USER:" + user);
     leadboard.push({
       user: user,
-      grade: userGrades[currUser],
+      grade: userGrades[currUser].toFixed(2),
     });
   }
 
