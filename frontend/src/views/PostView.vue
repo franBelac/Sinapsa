@@ -14,6 +14,7 @@ if (!jwt) {
   router.push("/login");
   router.go(1);
 }
+
 const route = useRoute();
 const ocjena = ref(3);
 const post = ref({
@@ -23,7 +24,6 @@ const post = ref({
   posttype: "",
   postdescription: "",
 });
-
 fetch(`${import.meta.env.VITE_BACKEND_URL}/user`, {
   headers: {
     "Content-Type": "application/json",
@@ -33,6 +33,9 @@ fetch(`${import.meta.env.VITE_BACKEND_URL}/user`, {
   .then((res) => res.json())
   .then((res) => {
     user.value = res;
+    if (user.value.username == "moderator") {
+      isAdmin.value = true;
+    }
 
     fetch(
       `${import.meta.env.VITE_BACKEND_URL}/post/distinct/${route.params.postId}`
@@ -217,7 +220,7 @@ const getUrl = (avatar) => `${import.meta.env.VITE_BACKEND_URL}/` + avatar;
           <button
             type="button"
             class="btn btn-labeled btn-danger mx-1"
-            v-if="isPostOwner"
+            v-if="isPostOwner || isAdmin"
             @click="deletePost"
           >
             <svg
