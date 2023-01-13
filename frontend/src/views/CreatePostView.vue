@@ -70,7 +70,6 @@ const sendPost = async () => {
     }),
   }).then((res) => {
     if (res.status === 201) {
-      console.log("Post created");
       router.push("/");
       return;
     }

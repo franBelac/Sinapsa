@@ -23,7 +23,6 @@ fetch(`${import.meta.env.VITE_BACKEND_URL}/user`, {
   .then((res) => res.json())
   .then((res) => {
     user.value = res;
-    console.log(user.value);
   });
 
 const handleChange = () => {
@@ -46,7 +45,6 @@ const handleChange = () => {
     body: JSON.stringify(body),
   })
     .then((res) => {
-      console.log(res);
       if (!(res.status == 200)) {
         alert("Couldn't execute!");
       }
@@ -55,9 +53,6 @@ const handleChange = () => {
     .then(() => {
       cookies.set("username", username.value);
       router.push("/");
-    })
-    .catch((err) => {
-      console.log(err);
     });
 };
 
