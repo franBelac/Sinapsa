@@ -35,7 +35,6 @@ const handleRegister = () => {
     method: "POST",
     body: data,
   }).then((res) => {
-    console.log(res);
     if (res.status === 201) {
       router.push({ name: "login" });
       return;

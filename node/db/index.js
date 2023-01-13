@@ -8,7 +8,7 @@ const pool = new Pool({
   port: 5432,
 });
 
-r = 'random'
+r = "ranm";
 module.exports = {
   query: (text, params) => {
     const start = Date.now();

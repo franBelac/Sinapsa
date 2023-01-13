@@ -31,8 +31,7 @@ fetch(`${import.meta.env.VITE_BACKEND_URL}/user`, {
 })
   .then((res) => res.json())
   .then((res) => {
-    user.value = res;
-    console.log(user.value);
+    user.value = res.user;
     fetch(`${import.meta.env.VITE_BACKEND_URL}/user/replies`, {
       headers: {
         "Content-Type": "application/json",

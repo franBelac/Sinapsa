@@ -19,6 +19,7 @@ router.get("/id/:id", async (req, res) => {
 router.get("/", async (req, res) => {
   const token = req.headers["authorization"];
   const secretKey = "tajnikljuc";
+  
   jwt.verify(token, secretKey, async (err, decoded) => {
     if (err) {
       res.status(401);
@@ -28,13 +29,20 @@ router.get("/", async (req, res) => {
     const payload = decoded;
     const id = payload.id;
     let qString1 = 
-     "select userid, username, firstname, lastname, email, created, useravatar from registered where userid = $1";
+     "select userid, username, firstname, lastname, email, created, useravatar from registered where userid = $1;";
+    const qString2 = "select userid from Moderator where userid = $1;";
+
+
     const query1 = await db.query(qString1, [id]);
+    const query2 = await db.query(qString2, [id]);
     if (query1.rowCount == 0) {
       res.status(404).end();
       return;
     }
-    res.status(200).json(query1.rows[0]);
+    let body = Object()
+    body.user = query1.rows[0];
+    body.isAdmin = query2.rowCount == 1;
+    res.status(200).json(body);
     return 
   });
 });
