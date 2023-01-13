@@ -31,7 +31,7 @@ router.post("/", async (req, res) => {
       console.log(payload);
       const user = payload.id;
 
-      if (id && desc && title) {
+      if (id && desc && title ) {
         db.query(userQueryUpdate, [desc, title, id]);
       } else if (title && desc && category && course) {
         console.log(title, desc, user, category);
