@@ -10,7 +10,10 @@ const postWCatQuerry =
     postid, posttitle, postdescription, username, date(timeofcreation) as timeofcreation, categoryname, abbreviationcourse, programename, useravatar \
     from post join registered on post.creatoruserid = registered.userid \
     natural join category natural join course\
-    join study_programme on course.programmeid = study_programme.programmeid";
+    join study_programme on course.programmeid = study_programme.programmeid\
+    where (current_date- date(timeofcreation) )<30\
+    order by timeofcreation desc";
+
 
 function timestampToDate(rows) {
   for (const row of rows) {
