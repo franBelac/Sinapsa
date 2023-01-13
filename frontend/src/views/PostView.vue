@@ -83,7 +83,7 @@ const deletePost = () => {
       explanation: "explainam ti staru",
     }),
   }).then((res) => {
-    if (res.status === 200) {
+    if (res.status === 201) {
       router.go(-1);
       return;
     }
