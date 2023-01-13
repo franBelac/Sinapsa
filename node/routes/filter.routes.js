@@ -3,6 +3,22 @@ const router = express.Router();
 const path = require("path");
 const db = require("../db");
 
+function timestampToDate(rows) {
+  for (const row of rows) {
+    d = new Date(row.timeofcreation)
+    d = d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear()
+    row.timeofcreation = d
+  }
+}
+
+function replyTimestampToDate(rows) {
+  for (const row of rows) {
+    d = new Date(row.replycreated)
+    d = d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear()
+    row.replycreated = d
+  }
+}
+
 router.post("/", async (req, res) => {
   let body = Object();
 
@@ -18,19 +34,25 @@ router.post("/", async (req, res) => {
   if (abbreviationcourse == null) abbreviationcourse = "%";
   if (categoryname == null) categoryname = "%";
 
-  let qString =
-    "select * from post natural join category natural join course natural join study_programme where programename like '" +
+  const qString =
+  "select \
+    postid, posttitle, postdescription, username, date(timeofcreation) as timeofcreation, categoryname, abbreviationcourse, programename, useravatar \
+    from post join registered on post.creatoruserid = registered.userid \
+    natural join category natural join course\
+    join study_programme on course.programmeid = study_programme.programmeid where programename like '" +
     programename +
     "' and abbreviationcourse like '" +
     abbreviationcourse +
     "' and categoryname like '" +
     categoryname +
-    "'";
+    "'" 
+    
 
   console.log(qString);
 
   try {
     const query = await db.query(qString, []);
+    timestampToDate(query.rows)
     console.log(qString);
     body.posts = query.rows;
     res.status(200).json(body);

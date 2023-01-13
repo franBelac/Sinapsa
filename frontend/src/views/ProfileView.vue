@@ -6,9 +6,11 @@ import { useRouter, useRoute } from "vue-router";
 const router = useRouter();
 const route = useRoute();
 const { cookies } = useCookies();
+const jwt = cookies.get("token");
 
-if (!cookies.get("token")) {
-  router.push("/");
+if (!jwt) {
+  router.push("/login");
+  router.go(1);
 }
 
 const user = ref({
@@ -21,22 +23,34 @@ const user = ref({
 
 const posts = ref([]);
 const replies = ref([]);
-
-const realUsername = cookies.get("username");
-
-fetch(`http://localhost:3001/user/${realUsername}`)
+fetch(`${import.meta.env.VITE_BACKEND_URL}/user`, {
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: jwt,
+  },
+})
   .then((res) => res.json())
   .then((res) => {
     user.value = res;
     console.log(user.value);
-    fetch(`http://localhost:3001/user/replies/${user.value.userid}`)
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/user/replies`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: jwt,
+      },
+    })
       .then((res) => res.json())
       .then((res) => {
         replies.value = res;
       });
   });
 
-fetch(`http://localhost:3001/post/user/${realUsername}`)
+fetch(`${import.meta.env.VITE_BACKEND_URL}/post/user`, {
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: jwt,
+  },
+})
   .then((res) => res.json())
   .then((res) => {
     posts.value = res.posts;
@@ -61,15 +75,13 @@ const newPost = () => {
   });
 };
 
-
 const editProfile = () => {
-  router.push(
-    name:"updateProfile",
-  );
-}
+  router.push({
+    name: "updateProfile",
+  });
+};
 
-
-const getUrl = (avatar) => "http://localhost:3001/" + avatar;
+const getUrl = (avatar) => `${import.meta.env.VITE_BACKEND_URL}/` + avatar;
 </script>
 
 <template>
@@ -78,6 +90,7 @@ const getUrl = (avatar) => "http://localhost:3001/" + avatar;
       <div class="col-12 col-lg-3 p-3 pt-5">
         <img
           class="rounded-circle shadow mx-auto d-block"
+          style="height: 150px; width: 150px"
           alt="avatar2"
           :src="getUrl(user.useravatar)"
         />
@@ -87,11 +100,17 @@ const getUrl = (avatar) => "http://localhost:3001/" + avatar;
           <label>{{ user.firstname }} {{ user.lastname }}</label
           ><br />
           <p>{{ user.email }}</p>
-          <button class="btn btn-labeled btn-success mx-1" @click="editProfile">
-            Uredi profil
-          </button>
-          <button class="btn btn-labeled btn-success mx-1" @click="newPost">
+          <button
+            class="btn btn-labeled btn-success mx-1 my-1"
+            @click="newPost"
+          >
             Novi oglas
+          </button>
+          <button
+            class="btn btn-labeled btn-success mx-1 my-1"
+            @click="editProfile"
+          >
+            Uredi profil
           </button>
         </div>
       </div>
@@ -107,7 +126,7 @@ const getUrl = (avatar) => "http://localhost:3001/" + avatar;
               <div class="col-4">
                 <img
                   class="rounded-circle shadow"
-                  style="height: 75px"
+                  style="height: 50px; width: 50px"
                   alt="avatar2"
                   :src="getUrl(post.useravatar)"
                 />

@@ -31,9 +31,8 @@ const handleRegister = () => {
   data.append("email", email.value);
   data.append("password", password.value);
 
-  fetch("http://localhost:3001/register", {
+  fetch(`${import.meta.env.VITE_BACKEND_URL}/register`, {
     method: "POST",
-    headers: {},
     body: data,
   }).then((res) => {
     console.log(res);

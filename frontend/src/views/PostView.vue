@@ -7,9 +7,13 @@ const isAdmin = ref(false);
 const reply = ref("");
 const isPostOwner = ref(false);
 const replies = ref([]);
-const username = cookies.get("username");
 const jwt = cookies.get("token");
 const router = useRouter();
+const user = ref({});
+if (!jwt) {
+  router.push("/login");
+  router.go(1);
+}
 const route = useRoute();
 const ocjena = ref(3);
 const post = ref({
@@ -20,19 +24,32 @@ const post = ref({
   postdescription: "",
 });
 
-fetch(`http://localhost:3001/post/distinct/${route.params.postId}`)
+fetch(`${import.meta.env.VITE_BACKEND_URL}/user`, {
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: jwt,
+  },
+})
   .then((res) => res.json())
   .then((res) => {
-    replies.value = res.replies;
-    post.value = res;
-    console.log(res);
-    if (post.value.username === username) {
-      isPostOwner.value = true;
-    }
+    user.value = res;
+
+    fetch(
+      `${import.meta.env.VITE_BACKEND_URL}/post/distinct/${route.params.postId}`
+    )
+      .then((res) => res.json())
+      .then((res) => {
+        replies.value = res.replies;
+        post.value = res;
+        console.log(res);
+        if (post.value.username === user.value.username) {
+          isPostOwner.value = true;
+        }
+      });
   });
 
 const postReply = () => {
-  fetch("http://localhost:3001/reply", {
+  fetch(`${import.meta.env.VITE_BACKEND_URL}/reply`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -55,7 +72,7 @@ const deletePost = () => {
   if (!confirm("Are you sure you want to delete this post?")) {
     return;
   }
-  fetch(`http://localhost:3001/delete`, {
+  fetch(`${import.meta.env.VITE_BACKEND_URL}/delete`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
@@ -88,7 +105,7 @@ const updatePost = (query) => {
 };
 
 const acceptReply = (reply) => {
-  fetch(`http://localhost:3001/reply/accept/${reply.replyid}`, {
+  fetch(`${import.meta.env.VITE_BACKEND_URL}/reply/accept/${reply.replyid}`, {
     method: "POST",
     headers: {
       Authorization: jwt,
@@ -103,7 +120,7 @@ const acceptReply = (reply) => {
 };
 
 const declineReply = (reply) => {
-  fetch(`http://localhost:3001/reply/decline/${reply.replyid}`, {
+  fetch(`${import.meta.env.VITE_BACKEND_URL}/reply/decline/${reply.replyid}`, {
     method: "POST",
     headers: {
       Authorization: jwt,
@@ -118,8 +135,7 @@ const declineReply = (reply) => {
 };
 
 const sendRating = (reply) => {
-  console.log(reply);
-  fetch(`http://localhost:3001/grade`, {
+  fetch(`${import.meta.env.VITE_BACKEND_URL}/grade`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -140,7 +156,7 @@ const sendRating = (reply) => {
   });
 };
 
-const getUrl = (avatar) => "http://localhost:3001/" + avatar;
+const getUrl = (avatar) => `${import.meta.env.VITE_BACKEND_URL}/` + avatar;
 </script>
 
 <template>
@@ -151,7 +167,7 @@ const getUrl = (avatar) => "http://localhost:3001/" + avatar;
           <div class="col-4">
             <img
               class="rounded-circle shadow"
-              style="height: 75px"
+              style="height: 75px; width: 75px"
               alt="avatar2"
               :src="getUrl(post.useravatar)"
             />
@@ -231,7 +247,7 @@ const getUrl = (avatar) => "http://localhost:3001/" + avatar;
       </div>
     </div>
 
-    <div class="w-75 mx-auto" v-for="oneReply in replies">
+    <div class="w-75 mx-auto" v-if="isPostOwner" v-for="oneReply in replies">
       <div
         class="shadow w-100 bg-light p-2 row rounded my-4 mx-auto row"
         v-if="oneReply.statusvalue != 'declined'"
@@ -239,7 +255,7 @@ const getUrl = (avatar) => "http://localhost:3001/" + avatar;
         <div class="col-3 col-md-1 p-3">
           <img
             class="rounded-circle shadow"
-            style="height: 75px"
+            style="height: 75px; width: 75px"
             alt="avatar2"
             :src="getUrl(oneReply.useravatar)"
           />
@@ -249,7 +265,9 @@ const getUrl = (avatar) => "http://localhost:3001/" + avatar;
         </div>
         <div class="col-12 col-sm-3">
           <div class="d-flex justify-content-end align-items-center h-25">
-            <span class="align-middle">{{ oneReply.username }}</span>
+            <span class="align-middle mx-1">{{ oneReply.username }}</span>
+            <span class="align-middle mx-1">{{ oneReply.email }}</span>
+
             <span class="ms-2 align-middle" style="font-size: 14px">
               {{ oneReply.replycreated }}
             </span>

@@ -1,19 +1,22 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
+import { useCookies } from "vue3-cookies";
+const { cookies } = useCookies();
+const token = cookies.get("token");
 const router = useRouter();
 const route = useRoute();
 const posts = ref([]);
 const predmeti = ref([]);
 const kategorije = ref([]);
 
-fetch("http://localhost:3001/post/all")
+fetch(`${import.meta.env.VITE_BACKEND_URL}/post/all`)
   .then((response) => response.json())
   .then((fetchedObject) => {
     posts.value = fetchedObject.posts;
   });
 
-fetch("http://localhost:3001/info")
+fetch(`${import.meta.env.VITE_BACKEND_URL}/info`)
   .then((response) => response.json())
   .then((fetchedObject) => {
     predmeti.value = fetchedObject.courses;
@@ -54,7 +57,7 @@ const filter = () => {
     abbreviationcourse: currentPredmet.value,
     categoryname: currentKategorija.value,
   };
-  fetch("http://localhost:3001/filter", {
+  fetch(`${import.meta.env.VITE_BACKEND_URL}/filter`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -72,6 +75,12 @@ const filter = () => {
   currentKategorija.value = "KATEGORIJA";
 };
 
+const newPost = () => {
+  router.push({
+    name: "create",
+  });
+};
+
 function pushWithQuery(query) {
   router.push({
     name: "post",
@@ -85,7 +94,7 @@ function pushWithQuery(query) {
   });
 }
 
-const getUrl = (avatar) => "http://localhost:3001/" + avatar;
+const getUrl = (avatar) => `${import.meta.env.VITE_BACKEND_URL}/` + avatar;
 </script>
 
 <template>
@@ -163,6 +172,17 @@ const getUrl = (avatar) => "http://localhost:3001/" + avatar;
         FILTER
       </button>
     </div>
+
+    <div class="btn-group m-1">
+      <button
+        type="button"
+        class="btn btn-labeled btn-success mx-1"
+        v-if="token"
+        @click="newPost"
+      >
+        Novi oglas
+      </button>
+    </div>
   </div>
 
   <div class="col-md-8 p-3 pt-5">
@@ -176,7 +196,7 @@ const getUrl = (avatar) => "http://localhost:3001/" + avatar;
             <div class="col-4">
               <img
                 class="rounded-circle shadow"
-                style="height: 75px"
+                style="height: 75px; width: 75px"
                 alt="avatar2"
                 :src="getUrl(post.useravatar)"
               />
@@ -187,7 +207,8 @@ const getUrl = (avatar) => "http://localhost:3001/" + avatar;
           </div>
           <div class="col-7 col-md-3">
             <div class="d-flex justify-content-end align-items-center">
-              <span class="align-middle">{{ post.username }}</span>
+              <span class="align-middle mx-1">{{ post.username }}</span>
+              <span class="align-middle mx-1">{{ post.email }}</span>
 
               <span class="ms-2 align-middle" style="font-size: 14px">
                 {{ post.timeofcreation }}
@@ -200,6 +221,7 @@ const getUrl = (avatar) => "http://localhost:3001/" + avatar;
           <button
             class="btn btn-primary col-4 col-md-1 mx-1"
             @click="pushWithQuery(post.postid)"
+            v-if="token"
           >
             Otvori
           </button>

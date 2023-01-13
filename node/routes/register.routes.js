@@ -17,7 +17,7 @@ async function sendConfirmationEmail(email, username) {
     },
   });
 
-  let link = "ax1.axiros.hr:8081/confirm/" + username;
+  let link = "ax1.axiros.hr:8080/confirm/" + username;
 
   // send mail with defined transport object
   let info = await transporter.sendMail({
