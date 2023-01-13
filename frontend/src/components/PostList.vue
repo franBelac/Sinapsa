@@ -100,7 +100,7 @@ const getUrl = (avatar) => `${import.meta.env.VITE_BACKEND_URL}/` + avatar;
 <template>
   <div class="m-1">
     <div class="btn-group">
-      <h5>FILTRIRAJ PO:</h5>
+      <p class="m-1 h5 font-weight-bold">FILTRIRAJ PO:</p>
     </div>
     <div class="btn-group m-1">
       <button
