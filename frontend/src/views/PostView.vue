@@ -7,9 +7,14 @@ const isAdmin = ref(false);
 const reply = ref("");
 const isPostOwner = ref(false);
 const replies = ref([]);
-const username = cookies.get("username");
 const jwt = cookies.get("token");
 const router = useRouter();
+const user = ref({});
+if (!jwt) {
+  router.push("/login");
+  router.go(1);
+}
+
 const route = useRoute();
 const ocjena = ref(3);
 const post = ref({
@@ -19,20 +24,35 @@ const post = ref({
   posttype: "",
   postdescription: "",
 });
-
-fetch(`http://ax1.axiros.hr:8080/post/distinct/${route.params.postId}`)
+fetch(`${import.meta.env.VITE_BACKEND_URL}/user`, {
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: jwt,
+  },
+})
   .then((res) => res.json())
   .then((res) => {
-    replies.value = res.replies;
-    post.value = res;
-    console.log(res);
-    if (post.value.username === username) {
-      isPostOwner.value = true;
+    user.value = res;
+    if (user.value.username == "moderator") {
+      isAdmin.value = true;
     }
+
+    fetch(
+      `${import.meta.env.VITE_BACKEND_URL}/post/distinct/${route.params.postId}`
+    )
+      .then((res) => res.json())
+      .then((res) => {
+        replies.value = res.replies;
+        post.value = res;
+        console.log(res);
+        if (post.value.username === user.value.username) {
+          isPostOwner.value = true;
+        }
+      });
   });
 
 const postReply = () => {
-  fetch("http://ax1.axiros.hr:8080/reply", {
+  fetch(`${import.meta.env.VITE_BACKEND_URL}/reply`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -55,7 +75,7 @@ const deletePost = () => {
   if (!confirm("Are you sure you want to delete this post?")) {
     return;
   }
-  fetch(`http://ax1.axiros.hr:8080/delete`, {
+  fetch(`${import.meta.env.VITE_BACKEND_URL}/delete`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
@@ -88,7 +108,7 @@ const updatePost = (query) => {
 };
 
 const acceptReply = (reply) => {
-  fetch(`http://ax1.axiros.hr:8080/reply/accept/${reply.replyid}`, {
+  fetch(`${import.meta.env.VITE_BACKEND_URL}/reply/accept/${reply.replyid}`, {
     method: "POST",
     headers: {
       Authorization: jwt,
@@ -103,7 +123,7 @@ const acceptReply = (reply) => {
 };
 
 const declineReply = (reply) => {
-  fetch(`http://ax1.axiros.hr:8080/reply/decline/${reply.replyid}`, {
+  fetch(`${import.meta.env.VITE_BACKEND_URL}/reply/decline/${reply.replyid}`, {
     method: "POST",
     headers: {
       Authorization: jwt,
@@ -118,8 +138,7 @@ const declineReply = (reply) => {
 };
 
 const sendRating = (reply) => {
-  console.log(reply);
-  fetch(`http://ax1.axiros.hr:8080/grade`, {
+  fetch(`${import.meta.env.VITE_BACKEND_URL}/grade`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -140,7 +159,7 @@ const sendRating = (reply) => {
   });
 };
 
-const getUrl = (avatar) => "http://ax1.axiros.hr:8080/" + avatar;
+const getUrl = (avatar) => `${import.meta.env.VITE_BACKEND_URL}/` + avatar;
 </script>
 
 <template>
@@ -201,7 +220,7 @@ const getUrl = (avatar) => "http://ax1.axiros.hr:8080/" + avatar;
           <button
             type="button"
             class="btn btn-labeled btn-danger mx-1"
-            v-if="isPostOwner"
+            v-if="isPostOwner || isAdmin"
             @click="deletePost"
           >
             <svg

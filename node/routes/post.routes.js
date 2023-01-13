@@ -10,21 +10,21 @@ const postWCatQuerry =
     postid, posttitle, postdescription, username, date(timeofcreation) as timeofcreation, categoryname, abbreviationcourse, programename, useravatar \
     from post join registered on post.creatoruserid = registered.userid \
     natural join category natural join course\
-    join study_programme on course.programmeid = study_programme.programmeid"
+    join study_programme on course.programmeid = study_programme.programmeid";
 
 function timestampToDate(rows) {
   for (const row of rows) {
-    d = new Date(row.timeofcreation)
-    d = d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear()
-    row.timeofcreation = d
+    d = new Date(row.timeofcreation);
+    d = d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear();
+    row.timeofcreation = d;
   }
 }
 
 function replyTimestampToDate(rows) {
   for (const row of rows) {
-    d = new Date(row.replycreated)
-    d = d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear()
-    row.replycreated = d
+    d = new Date(row.replycreated);
+    d = d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear();
+    row.replycreated = d;
   }
 }
 //OVO NE KORISTIMO!!!!
@@ -56,7 +56,7 @@ router.get("/all", async (req, res) => {
   let qString = postWCatQuerry;
   const query = await db.query(qString, []);
 
-  timestampToDate(query.rows)
+  timestampToDate(query.rows);
 
   let body = Object();
   body.posts = query.rows;
@@ -84,7 +84,7 @@ router.get("/distinct/:postId", async (req, res) => {
   }
 
   let body = Object();
-  timestampToDate(query.rows)
+  timestampToDate(query.rows);
   const post = query.rows[0];
   body.postid = post.postid;
   body.categoryid = post.categoryid;
@@ -111,14 +111,14 @@ router.get("/distinct/:postId", async (req, res) => {
   body.useravatar = query.rows[0].useravatar;
   body.email = query.rows[0].email;
   body.created = query.rows[0].created;
-  body.useravatar = query.rows[0].useravatar
+  body.useravatar = query.rows[0].useravatar;
 
   query = await db.query(
     "select * from replies join registered on replies.replycreatorid = registered.userid where postid = $1",
     [postId]
   );
 
-  replyTimestampToDate(query.rows) //ne lazem
+  replyTimestampToDate(query.rows); //ne lazem
 
   body.replies = query.rows;
 
@@ -142,7 +142,7 @@ router.get("/comments/:id", async (req, res) => {
 });
 
 router.get("/user", async (req, res) => {
-  const secretKey = 'tajnikljuc'
+  const secretKey = "tajnikljuc";
   const token = req.headers["authorization"];
   jwt.verify(token, secretKey, async (err, decoded) => {
     if (err) {
@@ -161,12 +161,12 @@ router.get("/user", async (req, res) => {
     const username = query1.rows[0].username;
     let qString2 = postWCatQuerry + " where username = $1";
     let query2 = await db.query(qString2, [username]);
-  
+
     let body = Object();
-    timestampToDate(query2.rows)
+    timestampToDate(query2.rows);
     body.posts = query2.rows;
     res.status(200).json(body);
-    return
+    return;
   });
 });
 

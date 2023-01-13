@@ -1,18 +1,25 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { useCredentialsStore } from "../stores/credentials";
 import { useCookies } from "vue3-cookies";
 const router = useRouter();
 const username = ref("");
 const password = ref("");
 const newPassword = ref("");
 const user = ref({});
-const credentials = useCredentialsStore();
 const { cookies } = useCookies();
-const currentUsername = cookies.get("username");
+const jwt = cookies.get("token");
+if (!jwt) {
+  router.push("/login");
+  router.go(1);
+}
 
-fetch(`http://ax1.axiros.hr:8080/user/${currentUsername}`)
+fetch(`${import.meta.env.VITE_BACKEND_URL}/user`, {
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: jwt,
+  },
+})
   .then((res) => res.json())
   .then((res) => {
     user.value = res;
@@ -30,11 +37,11 @@ const handleChange = () => {
     newPassword: sendPassword,
     currentPassword: password.value,
   };
-  console.log(body);
-  fetch("http://ax1.axiros.hr:8080/user/change", {
+  fetch(`${import.meta.env.VITE_BACKEND_URL}/user/change`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: jwt,
     },
     body: JSON.stringify(body),
   })

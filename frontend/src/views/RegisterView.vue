@@ -31,9 +31,8 @@ const handleRegister = () => {
   data.append("email", email.value);
   data.append("password", password.value);
 
-  fetch("http://ax1.axiros.hr:8080/register", {
+  fetch(`${import.meta.env.VITE_BACKEND_URL}/register`, {
     method: "POST",
-    headers: {},
     body: data,
   }).then((res) => {
     console.log(res);

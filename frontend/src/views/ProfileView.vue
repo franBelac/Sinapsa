@@ -6,9 +6,11 @@ import { useRouter, useRoute } from "vue-router";
 const router = useRouter();
 const route = useRoute();
 const { cookies } = useCookies();
+const jwt = cookies.get("token");
 
-if (!cookies.get("token")) {
-  router.push("/");
+if (!jwt) {
+  router.push("/login");
+  router.go(1);
 }
 
 const user = ref({
@@ -21,22 +23,34 @@ const user = ref({
 
 const posts = ref([]);
 const replies = ref([]);
-
-const realUsername = cookies.get("username");
-
-fetch(`http://ax1.axiros.hr:8080/user/${realUsername}`)
+fetch(`${import.meta.env.VITE_BACKEND_URL}/user`, {
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: jwt,
+  },
+})
   .then((res) => res.json())
   .then((res) => {
     user.value = res;
     console.log(user.value);
-    fetch(`http://ax1.axiros.hr:8080/user/replies/${user.value.userid}`)
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/user/replies`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: jwt,
+      },
+    })
       .then((res) => res.json())
       .then((res) => {
         replies.value = res;
       });
   });
 
-fetch(`http://ax1.axiros.hr:8080/post/user/${realUsername}`)
+fetch(`${import.meta.env.VITE_BACKEND_URL}/post/user`, {
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: jwt,
+  },
+})
   .then((res) => res.json())
   .then((res) => {
     posts.value = res.posts;
@@ -63,12 +77,11 @@ const newPost = () => {
 
 const editProfile = () => {
   router.push({
-    name:"updateProfile",
+    name: "updateProfile",
   });
-}
+};
 
-
-const getUrl = (avatar) => "http://ax1.axiros.hr:8080/" + avatar;
+const getUrl = (avatar) => `${import.meta.env.VITE_BACKEND_URL}/` + avatar;
 </script>
 
 <template>
@@ -87,13 +100,18 @@ const getUrl = (avatar) => "http://ax1.axiros.hr:8080/" + avatar;
           <label>{{ user.firstname }} {{ user.lastname }}</label
           ><br />
           <p>{{ user.email }}</p>
-          <button class="btn btn-labeled btn-success mx-1 my-1" @click="newPost">
+          <button
+            class="btn btn-labeled btn-success mx-1 my-1"
+            @click="newPost"
+          >
             Novi oglas
           </button>
-          <button class="btn btn-labeled btn-success mx-1 my-1" @click="editProfile">
+          <button
+            class="btn btn-labeled btn-success mx-1 my-1"
+            @click="editProfile"
+          >
             Uredi profil
           </button>
-
         </div>
       </div>
 
@@ -108,7 +126,7 @@ const getUrl = (avatar) => "http://ax1.axiros.hr:8080/" + avatar;
               <div class="col-4">
                 <img
                   class="rounded-circle shadow"
-                  style="height: 50px; width:50px"
+                  style="height: 50px; width: 50px"
                   alt="avatar2"
                   :src="getUrl(post.useravatar)"
                 />

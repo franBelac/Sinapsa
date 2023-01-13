@@ -1,15 +1,13 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { useCredentialsStore } from "../stores/credentials";
 import { useCookies } from "vue3-cookies";
 const router = useRouter();
 const username = ref("");
 const password = ref("");
-const credentials = useCredentialsStore();
 const { cookies } = useCookies();
 const handleLogin = () => {
-  fetch("http://ax1.axiros.hr:8080/login", {
+  fetch(`${import.meta.env.VITE_BACKEND_URL}/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -27,11 +25,9 @@ const handleLogin = () => {
       return res.json();
     })
     .then((res) => {
-      credentials.username = username.value;
-      credentials.token = res.token;
-      cookies.set("token", credentials.token);
-      cookies.set("username", credentials.username);
+      cookies.set("token", res.token);
       router.push({ name: "home" });
+      router.go();
     })
     .catch((err) => {
       console.log(err);
