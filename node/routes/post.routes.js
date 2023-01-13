@@ -14,7 +14,6 @@ const postWCatQuerry =
     where (current_date- date(timeofcreation) )<30\
     order by timeofcreation desc";
 
-
 function timestampToDate(rows) {
   for (const row of rows) {
     d = new Date(row.timeofcreation);
