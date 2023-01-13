@@ -1,22 +1,28 @@
 <script setup>
 import { RouterLink, RouterView } from "vue-router";
-import { storeToRefs } from "pinia";
-import { useCredentialsStore } from "./stores/credentials";
 import { useCookies } from "vue3-cookies";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
-const credentialsStore = useCredentialsStore();
-const { username, token } = storeToRefs(credentialsStore);
 const { cookies } = useCookies();
-token.value = cookies.get("token");
-username.value = cookies.get("username");
+const token = cookies.get("token");
 const handleLogout = () => {
-  credentialsStore.$reset();
   cookies.remove("token");
-  cookies.remove("username");
-  router.push("/");
+  router.push("/login");
+  router.go(0);
 };
+if (token) {
+  fetch(`${import.meta.env.VITE_BACKEND_URL}/verify`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token,
+    },
+  }).then((res) => {
+    if (!res.status == 200) {
+      handleLogout();
+    }
+  });
+}
 </script>
 
 <template>

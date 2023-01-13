@@ -39,6 +39,7 @@ const replyRouter = require("./routes/reply.routes");
 const gradeRouter = require("./routes/grade.routes");
 const filterRouter = require("./routes/filter.routes");
 const infoRouter = require("./routes/info.routes");
+const verifyRouter = require("./routes/verify.routes");
 
 app.use("/login", loginRouter);
 app.use("/register", registerRouter);
@@ -58,6 +59,7 @@ app.use("/user", userRouter);
 app.use("/confirm", confirmRouter);
 app.use("/reply", replyRouter);
 app.use("/info", infoRouter);
+app.use("/verify", verifyRouter);
 
 /*const options = {
     key: fs.readFileSync('localhost-key.pem'),
@@ -66,4 +68,4 @@ app.use("/info", infoRouter);
   
 https.createServer(options, app).listen(8080);*/
 
-app.listen(3001);
+app.listen(8000);

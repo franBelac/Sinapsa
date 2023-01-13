@@ -7,7 +7,8 @@ const route = useRoute();
 const router = useRouter();
 const jwt = cookies.get("token");
 if (!jwt) {
-  router.push("/");
+  router.push("/login");
+  router.go(1);
 }
 
 const postId = ref(null);
@@ -21,15 +22,17 @@ const kategorije = ref([]);
 
 if (route.params.postId) {
   postId.value = route.params.postId;
-  fetch(`http://localhost:3001/post/distinct/${route.params.postId}`)
+  fetch(
+    `${import.meta.env.VITE_BACKEND_URL}/post/distinct/${route.params.postId}`
+  )
     .then((res) => res.json())
     .then((res) => {
-      description.value = res.postDescription;
-      title.value = res.postTitle;
+      description.value = res.postdescription;
+      title.value = res.posttitle;
     });
 }
 
-fetch("http://localhost:3001/info")
+fetch(`${import.meta.env.VITE_BACKEND_URL}/info`)
   .then((response) => response.json())
   .then((fetchedObject) => {
     predmeti.value = fetchedObject.courses;
@@ -51,7 +54,7 @@ const sendPost = async () => {
     return;
   }
   router.go(-1);
-  await fetch("http://localhost:3001/update", {
+  await fetch(`${import.meta.env.VITE_BACKEND_URL}/update`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
