@@ -27,10 +27,13 @@ router.delete("/", async (req, res) => {
     res.json({ status: "fail" });
     return;
   }
+  console.log("id je ", id);
   const post = await db.query(userQuery2, [id]);
-  userid = post.rows[0].creatoruserid;
-
-  if (post.rowCount > 0 && token != undefined) {
+  console.log("post.rowCount je ", post.rowCount);
+  if (post.rowCount > 0) {
+    console.log("prije userid je ");
+    const userid = post.rows[0].creatoruserid;
+    console.log("userid je ", userid);
     jwt.verify(token, secretKey, async (err, decoded) => {
       if (err) {
         res.status(401);
@@ -38,12 +41,11 @@ router.delete("/", async (req, res) => {
         return;
       }
       const payload = decoded;
-      const id = payload.id;
-      if (ids.includes(id) || userid == id) {
+      const cuid = payload.id;
+      if (ids.includes(id) || userid == cuid) {
+        console.log("brisem");
         await db.query(userQuery1, [id]);
-        await db.query(userQuery3, [explanation, id, userid]);
         res.status(200);
-        res.json({ status: "success" });
         return;
       }
     });
