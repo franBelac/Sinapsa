@@ -40,18 +40,22 @@ router.delete("/", async (req, res) => {
         res.json({});
         return;
       }
+      //console.log("nema greske")
       const payload = decoded;
       const cuid = payload.id;
-      if (ids.includes(id) || userid == cuid) {
-        console.log("brisem");
+      if (ids.includes(cuid) || userid == cuid) {
         await db.query(userQuery1, [id]);
-        res.status(200);
+        console.log("brisem");
+        res.status(201).end;
         return;
       }
     });
   }
-  res.status(404);
-  return;
+  else{
+    res.status(400);
+    res.json({ status: "fail" });
+    return;
+  }
 });
 
 module.exports = router;
